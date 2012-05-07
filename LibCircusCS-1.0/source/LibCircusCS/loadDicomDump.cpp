@@ -865,7 +865,7 @@ base64Decode(const char* src)
 	unsigned char* ret = NULL;
 	unsigned char  ind1, ind2, ind3, ind4;
 	
-	int size = sizeof(src[0])*strlen(src);    
+	int size = sizeof(src[0])*(int)strlen(src);    
 	
 	ret = (unsigned char*)calloc(sizeof(unsigned char), size + 3);
 

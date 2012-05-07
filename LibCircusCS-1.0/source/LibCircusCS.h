@@ -14,7 +14,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
 #include "VOL.h"
 
 #include "LibCircusCS/defDicomTagStr.h"
@@ -23,7 +22,7 @@
 #include "LibCircusCS/imageUtility.h"
 #include "LibCircusCS/saveJpeg.h"
 #include "LibCircusCS/savePng.h"
-#include "LibCircusCS/volumeOneFileIO.h"
+#include "LibCircusCS/rawVolumeIO.h"
 
 #ifdef WIN32
 #include "LibCircusCS/winUtility.h"
