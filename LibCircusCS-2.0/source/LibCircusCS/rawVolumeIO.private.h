@@ -3,13 +3,13 @@
 //
 //		LibCircusCS : library for CIRCUS CS plug-in development 
 //
-//		rawVolumeIO.h: I/O function for raw volume file (.vol)  
+//		rawVolumeIO.private.h: I/O function for raw volume file (.raw)  
 //
 //			main coder: Y. Nomura
 //
 //			update history
 //
-//			2012.05.02	start coding
+//			2012.05.02	start coding (without VOL library)
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////

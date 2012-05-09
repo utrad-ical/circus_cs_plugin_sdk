@@ -29,22 +29,23 @@ typedef struct DcmDumpData
 
 typedef struct basicDcmTagValues
 {
-	char           modality[16];
-	char           studyDate[32];
-	char           studyTime[32];
-	char           seriesDate[32];
-	char           seriesTime[32];
-	char           sex[8];
-	int            age;
-	float          size;
-	float          weight;
-	VOL_INTSIZE3D* matrixSize;
-	VOL_SIZE3D*    voxelSize_mm;
-	float          sliceThickness_mm;
-	float          sliceLocationOrigin_mm;
-	float          sliceLocationPitch_mm;
-	double		   rescaleSlope;
-	double         rescaleIntercept;
+	char                modality[16];
+	char                studyDate[32];
+	char                studyTime[32];
+	char                seriesDate[32];
+	char                seriesTime[32];
+	char                sex[8];
+	int                 age;
+	float               size;
+	float               weight;
+	CircusCS_INTSIZE3D* matrixSize;
+	CircusCS_SIZE3D*    voxelSize_mm;
+	int                 pixelUnit;
+	float               sliceThickness_mm;
+	float               sliceLocationOrigin_mm;
+	float               sliceLocationPitch_mm;
+	double		        rescaleSlope;
+	double              rescaleIntercept;
 }CircusCS_BASICDCMTAGVALUES;
 
 
@@ -74,20 +75,23 @@ int	 CircusCS_GetPatientWeightOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* 
 int	 CircusCS_GetImageNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* imageNum, int sliceNum=0);
 int	 CircusCS_GetAcquisitionNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* acquisitionNum, int sliceNum=0);
 
-int	 CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_INTSIZE2D* matrixSize, int sliceNum=0);
+int	 CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_INTSIZE2D* matrixSize, int sliceNum=0);
 int	 CircusCS_GetFieldOfViewOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* fov, int sliceNum=0);
 int	 CircusCS_GetSliceThicknessOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* thickness, int sliceNum=0);
 int	 CircusCS_GetDistanceBetweenSlicesOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* dbs, int sliceNum=0);
 int	 CircusCS_GetSliceLocationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* sliceLoc, int sliceNum=0);
-int	 CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_VECTOR* imageOrientation, int sliceNum=0);
-int	 CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_VECTOR3D* imagePos, int sliceNum=0);
-int	 CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE2D* pixelSpacing, int sliceNum=0);
-int  CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE3D* voxelSize_mm, int sliceNum=0);
+int	 CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE2D* pixelSpacing, int sliceNum=0);
+int	 CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit, int sliceNum=0);
+int  CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D* voxelSize_mm, int sliceNum=0);
 
 int	 CircusCS_GetRescaleInterceptOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* intercept, int sliceNum=0);
 int	 CircusCS_GetRescaleSlopeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* slope, int sliceNum=0);
 
 int	 CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* totalDose, int sliceNum=0);
+
+std::vector<float> CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum=0);
+std::vector<float> CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum=0);
+
 
 
 unsigned char*

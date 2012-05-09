@@ -103,15 +103,15 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 		return NULL;
 	}
 
-	if( (ret->matrixSize = VOL_NewIntSize3D(0, 0, 0)) == NULL)
+	if( (ret->matrixSize = CircusCS_NewIntSize3D(0, 0, 0)) == NULL)
 	{
 		free(ret);
 		return NULL;
 	}
 
-	if( (ret->voxelSize_mm = VOL_NewSize3D(0.0f, 0.0f, 0.0f)) == NULL)
+	if( (ret->voxelSize_mm = CircusCS_NewSize3D(0.0f, 0.0f, 0.0f)) == NULL)
 	{
-		VOL_DeleteIntSize3D(ret->matrixSize);
+		CircusCS_DeleteIntSize3D(ret->matrixSize);
 		free(ret);
 		return NULL;
 	}
@@ -145,7 +145,7 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 	CircusCS_GetPatientWeightOfDumpData(dumpData, &ret->weight, sliceNum);
 
 	// Matrix size
-	VOL_INTSIZE2D matrixSize;
+	CircusCS_INTSIZE2D matrixSize;
 
 	CircusCS_GetMatrixSizeOfDumpData(dumpData, &matrixSize, sliceNum);
 
@@ -172,6 +172,9 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 
 	// Voxel size (mm)
 	CircusCS_GetVoxelSizeOfDumpData(dumpData, ret->voxelSize_mm, sliceNum);
+
+	// Pixel unit
+	CircusCS_GetPixelUnitOfDicomData(dumpData, &ret->pixelUnit, sliceNum);
 
 	// Slice thickness
 	CircusCS_GetSliceThicknessOfDumpData(dumpData, &ret->sliceThickness_mm, sliceNum);
@@ -202,8 +205,8 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 void
 CircusCS_DeleteBasicDcmTagValues(CircusCS_BASICDCMTAGVALUES* values)
 {
-	VOL_DeleteSize3D(values->voxelSize_mm);
-	VOL_DeleteIntSize3D(values->matrixSize);
+	CircusCS_DeleteSize3D(values->voxelSize_mm);
+	CircusCS_DeleteIntSize3D(values->matrixSize);
 	free(values);
 }
 
@@ -315,7 +318,7 @@ CircusCS_GetAcquisitionNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* acq
 
 
 int
-CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_INTSIZE2D* matrixSize, int sliceNum)
+CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_INTSIZE2D* matrixSize, int sliceNum)
 {
 	std::string buffer;
 	
@@ -393,60 +396,9 @@ CircusCS_GetSliceLocationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* slice
 	return 0;
 }
 
-int
-CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_VECTOR* imageOrientation, int sliceNum)
-{
-	char *tp;
-	char buffer[MAX_STRING_LENGTH];
-
-	if(imageOrientation->n < 6)
-	{
-		fprintf(stderr, "Error : Output vector size is smaller than 6 !!\n");
-		return -1;
-	}
-	
-	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_ImageOrientationPatient).c_str());
-
-	if(strcmp(buffer, "") == 0)  return -1;
-
-	tp =  strtok(buffer, "\\");
-	imageOrientation->data[0] = (float)atof(tp);
-
-	for (int i=1; i<=5; i++)
-	{
-		tp = strtok(NULL, "\\");
-		imageOrientation->data[i] = (float)atof(tp);
-	}
-		
-	return 0;
-}
-
 
 int
-CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_VECTOR3D* imagePos, int sliceNum)
-{
-	char *tp;
-	char buffer[MAX_STRING_LENGTH];
-
-	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_ImagePositionPatient).c_str());
-
-	if(strcmp(buffer, "") == 0)  return -1;
-		
-	tp =  strtok(buffer, "\\");
-	imagePos->x = (float)atof(tp);
-
-	tp =  strtok(NULL, "\\");
-	imagePos->y = (float)atof(tp);
-	
-	tp =  strtok(NULL, "\\");
-	imagePos->z = (float)atof(tp);	
-		
-	return 0;
-}
-
-
-int
-CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE2D* pixelSpacing, int sliceNum)
+CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE2D* pixelSpacing, int sliceNum)
 {
 	char *tp;
 	char buffer[MAX_STRING_LENGTH];
@@ -465,9 +417,44 @@ CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE2D* p
 }
 
 int
-CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE3D* voxelSize_mm, int sliceNum)
+CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit, int sliceNum)
 {
-	VOL_SIZE2D pixelSpacing_mm;
+	char buffer[MAX_STRING_LENGTH];
+
+	// Get BitsAllocated (0x0028, 0x0100)
+	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_BitsAllocated).c_str());
+
+	if(strcmp(buffer, "") == 0)  return -1;
+	int bits = atoi(buffer);
+
+	// Get PixelRepresentation (0x0028, 0x0103)
+	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_PixelRepresentation).c_str());
+	int sign = (strcmp(buffer, "") == 0) ? 0 : atoi(buffer);  // 1 : Signed, 0 : Unsigned
+
+	if(bits <= 8)
+	{
+		if(sign)	*pixelUnit = CircusCS_PIXELUNIT_SINT8;
+		else		*pixelUnit = CircusCS_PIXELUNIT_UINT8;
+		return 0;
+	}
+	else if(bits <=16)
+	{
+		if(sign)	*pixelUnit = CircusCS_PIXELUNIT_SINT16;
+		else		*pixelUnit = CircusCS_PIXELUNIT_UINT16;
+		return 0;
+	}
+	else
+	{
+		*pixelUnit = CircusCS_PIXELUNIT_UNKNOWN;
+		return -1;
+	}
+}
+
+
+int
+CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D* voxelSize_mm, int sliceNum)
+{
+	CircusCS_SIZE2D pixelSpacing_mm;
 	char       modality[64];
 
 	if(CircusCS_GetPixelSpacingOfDumpData(dumpData, &pixelSpacing_mm, sliceNum)==-1)  return -1;
@@ -483,19 +470,25 @@ CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE3D* voxe
 		if( CircusCS_GetDistanceBetweenSlicesOfDumpData(dumpData, &voxelSize_mm->depth, sliceNum) == -1
 			|| voxelSize_mm->depth <= 0.0f || voxelSize_mm->depth > 10.0f )
 		{
-			VOL_VECTOR3D	imagePosition0, imagePosition1;
-
-			fprintf(stderr,"Warning: Distance between Slices not found or invalid (%f) in DICOM (IMAGE_POSITION used)\n",
+			fprintf(stderr,"Warning: Distance between Slices is not found or invalid (%f) in DICOM (IMAGE_POSITION used)\n",
 				    voxelSize_mm->depth);
 
-			if(CircusCS_GetImagePositionOfDumpData(dumpData, &imagePosition0, sliceNum)==-1)   return -1;
-			if(CircusCS_GetImagePositionOfDumpData(dumpData, &imagePosition1, sliceNum+1)==-1) return -1;
-			
-			imagePosition0.x -= imagePosition1.x;
-			imagePosition0.y -= imagePosition1.y;
-			imagePosition0.z -= imagePosition1.z;
+			std::vector<float> imagePosition0 = CircusCS_GetImagePositionOfDumpData(dumpData, sliceNum);
+			std::vector<float> imagePosition1 = CircusCS_GetImagePositionOfDumpData(dumpData, sliceNum+1);
 
-			voxelSize_mm->depth = VOL_VectorLength3D(&imagePosition0);
+			if(imagePosition0.empty() || imagePosition1.empty())
+			{
+				fprintf(stderr, "IMAGE_POSITION is not found in DICOM dump data\n");
+				return -1;
+			}
+
+			imagePosition0[0] -= imagePosition1[0];
+			imagePosition0[1] -= imagePosition1[1];
+			imagePosition0[2] -= imagePosition1[2];
+
+			voxelSize_mm->depth = (float)sqrt(imagePosition0[0] * imagePosition0[0]
+											  + imagePosition0[1] * imagePosition0[1]
+											  + imagePosition0[2] * imagePosition0[2]);
 		}
 	}
 	else
@@ -510,7 +503,6 @@ CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, VOL_SIZE3D* voxe
 
 	return 0;
 }
-
 
 
 int
@@ -567,6 +559,53 @@ CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData, doub
 }
 
 
+std::vector<float>
+CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum)
+{
+	char *tp;
+	char buffer[MAX_STRING_LENGTH];
+	std::vector<float> ret;
+
+	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_ImageOrientationPatient).c_str());
+
+	if(strcmp(buffer, "") == 0)  return ret;
+
+	tp =  strtok(buffer, "\\");
+	ret.push_back((float)atof(tp));
+
+	for (int i=1; i<=5; i++)
+	{
+		tp = strtok(NULL, "\\");
+		ret.push_back((float)atof(tp));
+	}
+		
+	return ret;
+}
+
+std::vector<float>
+CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum)
+{
+	char *tp;
+	char buffer[MAX_STRING_LENGTH];
+	std::vector<float> ret;
+
+	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, TAGSTR_ImagePositionPatient).c_str());
+
+	if(strcmp(buffer, "") == 0)  return ret;
+		
+	tp =  strtok(buffer, "\\");
+	ret.push_back((float)atof(tp));
+
+	tp =  strtok(NULL, "\\");
+	ret.push_back((float)atof(tp));
+	
+	tp =  strtok(NULL, "\\");
+	ret.push_back((float)atof(tp));	
+		
+	return ret;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned char*
@@ -583,14 +622,14 @@ CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dum
 	return base64Decode(tmpStr.c_str());
 }
 
-template<typename T>
-std::vector<T> GetDcmPrivateTagElementOfDumpDataAsArray(CircusCS_DCMDUMPDATA* dumpData,
-										                int sliceNum,
-										                unsigned short groupWord,
-										                unsigned short elementWord)
+template<typename VARTYPE>
+std::vector<VARTYPE> GetDcmPrivateTagElementOfDumpDataAsArray(CircusCS_DCMDUMPDATA* dumpData,
+											                  int sliceNum,
+											                  unsigned short groupWord,
+											                  unsigned short elementWord)
 {
-	T buf;
-	std::vector<T> ret;
+	VARTYPE buf;
+	std::vector<VARTYPE> ret;
 	unsigned char* tmpStr = NULL;
 
 	tmpStr = CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint8Array(dumpData,
@@ -606,7 +645,7 @@ std::vector<T> GetDcmPrivateTagElementOfDumpDataAsArray(CircusCS_DCMDUMPDATA* du
 	{
 		while(1)
 		{
-			memcpy(&buf, tp, sizeof(T));
+			memcpy(&buf, tp, sizeof(VARTYPE));
 			ret.push_back(buf);
 
 			tp = strtok(NULL , "\\");

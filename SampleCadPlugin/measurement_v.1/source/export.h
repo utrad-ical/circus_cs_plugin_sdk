@@ -5,8 +5,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 int exportImageFilesFromVolumeData(char* jobRootPath,
-								   VOL_RAWVOLUMEDATA* orgVolume,
-								   VOL_RAWVOLUMEDATA* resultVolume);
+								   short* orgVolume,
+								   unsigned char* resultVolume,
+								   CircusCS_INTSIZE3D* matrixSize);
 
 #ifdef __cplusplus
 }

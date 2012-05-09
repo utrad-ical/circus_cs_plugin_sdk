@@ -10,10 +10,8 @@
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
-void ConvertRawImageDataToRawVolumeData(VOL_RAWIMAGEDATA* srcData, int srcCh, VOL_RAWVOLUMEDATA* dstData, int dstCh);
-void ConvertRawVolumeDataToRawImageData(VOL_RAWVOLUMEDATA* srcData, int srcCh, VOL_RAWIMAGEDATA* dstData, int dstCh);

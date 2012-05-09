@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>LibCircusCS-1.0</ProjectName>
+    <ProjectName>LibCircusCS-2.0</ProjectName>
     <ProjectGuid>{DA598824-92AE-4F49-A597-8495EF6E2DC3}</ProjectGuid>
     <RootNamespace>VOLxxx</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
@@ -106,7 +106,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../VOL-1.2/source;../libjpeg/include;../libpng-1.2.46/include;../zlib-1.25/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libjpeg/include;../libpng-1.2.46/include;../zlib-1.25/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -114,7 +114,7 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>../VOL-1.2/library/$(Platform);../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,7 +141,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>../VOL-1.2/source;../libjpeg/include;../libpng-1.2.46/include;../zlib-1.25/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libjpeg/include;../libpng-1.2.46/include;../zlib-1.25/include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -149,10 +149,12 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>../VOL-1.2/library/$(Platform);../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\LibCircusCS\basicPrimitive.h" />
+    <ClInclude Include="source\LibCircusCS\basicPrimitive.private.h" />
     <ClInclude Include="source\LibCircusCS\defDicomTagStr.h" />
     <ClInclude Include="source\LibCircusCS\imageUtility.h" />
     <ClInclude Include="source\LibCircusCS\imageUtility.private.h" />
@@ -160,24 +162,25 @@
     <ClInclude Include="source\LibCircusCS\intensityProjection.private.h" />
     <ClInclude Include="source\LibCircusCS\loadDicomDump.h" />
     <ClInclude Include="source\LibCircusCS\loadDicomDump.private.h" />
+    <ClInclude Include="source\LibCircusCS\rawVolumeIO.h" />
+    <ClInclude Include="source\LibCircusCS\rawVolumeIO.private.h" />
     <ClInclude Include="source\LibCircusCS\saveJpeg.h" />
     <ClInclude Include="source\LibCircusCS\saveJpeg.private.h" />
     <ClInclude Include="source\LibCircusCS\savePng.h" />
     <ClInclude Include="source\LibCircusCS\savePng.private.h" />
-    <ClInclude Include="source\LibCircusCS\volumeOneFileIO.h" />
-    <ClInclude Include="source\LibCircusCS\volumeOneFileIO.private.h" />
     <ClInclude Include="source\LibCircusCS\winUtility.h" />
     <ClInclude Include="source\LibCircusCS\winUtility.private.h" />
     <ClInclude Include="source\SimpleIni\SimpleIni.h" />
     <ClInclude Include="source\LibCircusCS.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\LibCircusCS\basicPrimitive.cpp" />
     <ClCompile Include="source\LibCircusCS\imageUtility.cpp" />
     <ClCompile Include="source\LibCircusCS\intensityProjection.cpp" />
     <ClCompile Include="source\LibCircusCS\loadDicomDump.cpp" />
+    <ClCompile Include="source\LibCircusCS\rawVolumeIO.cpp" />
     <ClCompile Include="source\LibCircusCS\saveJpeg.cpp" />
     <ClCompile Include="source\LibCircusCS\savePng.cpp" />
-    <ClCompile Include="source\LibCircusCS\volumeOneFileIO.cpp" />
     <ClCompile Include="source\LibCircusCS\winUtility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

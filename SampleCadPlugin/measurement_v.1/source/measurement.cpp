@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 
-#include "VOL.h"
 #include "LibCircusCS.h"
 
 #include "measurement.h"
@@ -15,47 +14,62 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned long get_RGBA_bytes(float r,float g,float b,float a)
-{
-	unsigned long	R, G, B, A;
-
-	R = static_cast<unsigned long>(r*255.0f);
-	G = static_cast<unsigned long>(g*255.0f);
-	B = static_cast<unsigned long>(b*255.0f);
-	A = static_cast<unsigned long>(a*255.0f);
-
-	return ( (R<<24) + (G<<16) + (B<<8) + A );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 int
 measurmentMain(char* jobRootPath, int coreNum)
 {
-	char inVolumeFname[1024], resFname[1024], logFname[1024];
+	char inVolumeFname[1024], inDumpFname[1024], logFname[1024];
+	char resFname[1024];
+	char buffer[1024];
 
-	sprintf(inVolumeFname, "%s\\0.vol", jobRootPath);
+	sprintf(inVolumeFname, "%s\\0.raw", jobRootPath);
+	sprintf(inDumpFname,   "%s\\0.txt", jobRootPath);
 	sprintf(resFname,      "%s\\%s",    jobRootPath, RESULTS_FNAME);	
 	sprintf(logFname,      "%s\\%s",    jobRootPath, LOG_FNAME);
- 
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Get basic DICOM tag value
+	//------------------------------------------------------------------------------------------------------------------
+	CircusCS_AppendLogFile(logFname, "Load DICOM dump data");
+
+	CircusCS_BASICDCMTAGVALUES* dcmTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
+	if(dcmTagData == NULL)
+	{
+		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
+		CircusCS_AppendLogFile(logFname, buffer);
+		return -1;
+	}
+	//------------------------------------------------------------------------------------------------------------------
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Load volume data
-	VOL_RAWVOLUMEDATA* volume = CircusCS_LoadVolumeOneFile(inVolumeFname);
+	//------------------------------------------------------------------------------------------------------------------
+	CircusCS_AppendLogFile(logFname, "Load volume data");
+
+	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
+	short* volume = CircusCS_LoadRawVolumeFileAsSint16(inVolumeFname, length);
+
 	if(volume == NULL)
 	{
-		CircusCS_AppendLogFile(logFname, "Fail to load volume data: 0.vol");
+		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
+		CircusCS_AppendLogFile(logFname, buffer);
+		CircusCS_DeleteBasicDcmTagValues(dcmTagData);
 		return -1;
 	}
+	//------------------------------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------------------------------
 	// Initialize result volume (RGBA color)
-	VOL_INTSIZE3D* matrixSize = VOL_GetIntSize3DFromIntSize4D(volume->matrixSize);
+	//------------------------------------------------------------------------------------------------------------------
+	unsigned char* resultVolume = (unsigned char*)calloc(length*3, sizeof(unsigned char));
 
-	VOL_RAWVOLUMEDATA* resultVolume = VOL_NewSingleChannelRawVolumeData(matrixSize, VOL_VALUEUNIT_UINT32,VOL_VALUETYPE_RGBA);
 	if(resultVolume == NULL)
 	{
-		VOL_DeleteRawVolumeData(volume);
+		sprintf(buffer, "Fail to allocate result volume");
+		CircusCS_AppendLogFile(logFname, buffer);
+		free(volume);
 		return -1;
 	}
+	//------------------------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Measurement main
@@ -68,40 +82,39 @@ measurmentMain(char* jobRootPath, int coreNum)
 
 	short threshold = 100;
 
-	short***         srcData = (short***)volume->array4D[0];
-	unsigned long*** dstData = (unsigned long***)resultVolume->array4D[0];
-
-	for(int k=0; k<matrixSize->depth;  k++)
-	for(int j=0; j<matrixSize->height; j++)
-	for(int i=0; i<matrixSize->width;  i++)
+	for(int k=0; k<dcmTagData->matrixSize->depth;  k++)
+	for(int j=0; j<dcmTagData->matrixSize->height; j++)
+	for(int i=0; i<dcmTagData->matrixSize->width;  i++)
 	{
-		if(srcData[k][j][i] < min) min  = srcData[k][j][i];
-		if(srcData[k][j][i] > max) max  = srcData[k][j][i];
-		mean += srcData[k][j][i];
+		int pos = k * dcmTagData->matrixSize->height * dcmTagData->matrixSize->width
+			    + j * dcmTagData->matrixSize->width + i;
 
-		if(srcData[k][j][i] >= THRESHOLD)
+		if(volume[pos] < min) min  = volume[pos];
+		if(volume[pos] > max) max  = volume[pos];
+		mean += volume[pos];
+
+		resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = resultVolume[pos * 3 + 2] = 0;
+
+		if(volume[pos] >= THRESHOLD)
 		{
-			dstData[k][j][i] = get_RGBA_bytes(1.0f, 1.0f, 0.0f, 0.0f);
+			resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = 255;
 		}
 	}
-	mean /= (matrixSize->width * matrixSize->height * matrixSize->depth);
+	mean /= length;
 	//------------------------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Save measurement results (measurement_v.1.txt)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Save measurement results (measurement_v.1.txt)");
+	{
+		FILE* fp = fopen(resFname, "w");
+		if(!fp)  return -1;
 
-	FILE* fp = fopen(resFname, "w");
-	if(!fp)  return -1;
+		fprintf(fp, "%d, %.2f, %.2f, %.2f\n", 1, min, max, mean);
 
-	// 1st line
-	fprintf(fp, "%d\n", 1);
-
-	// 2nd line 
-	fprintf(fp, "%d, %.2f, %.2f, %.2f\n", 1, min, max, mean);
-
-	fclose(fp);
+		fclose(fp);
+	}
 	//------------------------------------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -109,10 +122,10 @@ measurmentMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Export image files from volume data (axial section)");
 
-	exportImageFilesFromVolumeData(jobRootPath, volume, resultVolume);
+	exportImageFilesFromVolumeData(jobRootPath, volume, resultVolume, dcmTagData->matrixSize);
 
-	VOL_DeleteRawVolumeData(volume);
-	VOL_DeleteRawVolumeData(resultVolume);
+	free(volume);
+	free(resultVolume);
 	//------------------------------------------------------------------------------------------------------------------
 
 	CircusCS_AppendLogFile(logFname, "Finished");

@@ -10,6 +10,7 @@
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -25,44 +26,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-CircusCS_SavePNG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int compressLevel)
+CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int height, int type, int compressLevel)
 {
-	if(!((img->pixelType[ch] == VOL_VALUETYPE_RGBA)
-		 || (img->pixelType[ch] == VOL_VALUETYPE_SINGLE && img->pixelUnit[ch] == VOL_VALUEUNIT_UINT8)))
-	{
-		return -1;
-	}
-
-	VOL_RAWIMAGEDATA* tmpImg = VOL_DuplicateRawImageData(img);
-
-	//----------------------------------------------------------------------------------------------
-	// Convert single image data to RGBA image data 
-	//----------------------------------------------------------------------------------------------
-	if(img->pixelType[ch] == VOL_VALUETYPE_SINGLE && img->pixelUnit[ch] == VOL_VALUEUNIT_UINT8)
-	{
-		VOL_DuplicateChannelOfRawImageData(tmpImg, ch);
-		VOL_DuplicateChannelOfRawImageData(tmpImg, ch);
-
-		// Set alpha channel (dummy)
-		VOL_AddNewChannelInRawImageData(tmpImg, VOL_VALUEUNIT_UINT8, VOL_VALUETYPE_SINGLE);
-		
-		int pixelNum  = VOL_GetNumberOfPixels(img);
-		unsigned char* alphaPtr = (unsigned char*)tmpImg->data[3];
-
-		for(int i=0; i<pixelNum; i++)
-		{
-			*alphaPtr++ = (unsigned char)255;
-		}
-
-		VOL_ChangeColorTypeOfRgbaRawImageData(tmpImg);
-	}
-	//----------------------------------------------------------------------------------------------
-
 	//----------------------------------------------------------------------------------------------
 	// Open file
 	//----------------------------------------------------------------------------------------------
 	FILE* fp = fopen(fileName, "wb");
-	if(!fp)		return -1;
+	if(!fp)
+	{
+		fprintf(stderr, "Fail to open file: %s\n", fileName);
+		return -1;
+	}
 	//----------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
@@ -72,6 +46,7 @@ CircusCS_SavePNG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int compressLeve
 	if(!pngStruct)
 	{
 		fclose(fp);
+		fprintf(stderr, "Fail to initialize png_struct.\n");
 		return -1;
 	}
 
@@ -80,6 +55,7 @@ CircusCS_SavePNG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int compressLeve
 	{
 		png_destroy_write_struct(&pngStruct, NULL);
 		fclose(fp);
+		fprintf(stderr, "Fail to initialize png_info.\n");
 		return -1;
 	}
 
@@ -108,33 +84,47 @@ CircusCS_SavePNG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int compressLeve
 
 	int pngColorType = PNG_COLOR_TYPE_RGB;
 
-	png_set_IHDR(pngStruct, pngInfo,
-				 tmpImg->matrixSize->width, tmpImg->matrixSize->height,
-				 8, pngColorType, PNG_INTERLACE_NONE,
-				 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT );
+	png_set_IHDR(pngStruct,
+				 pngInfo,
+				 width,
+				 height,
+				 8,
+				 pngColorType,
+				 PNG_INTERLACE_NONE,
+				 PNG_COMPRESSION_TYPE_DEFAULT,
+				 PNG_FILTER_TYPE_DEFAULT);
 	//----------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
 	// set pixel data
 	//----------------------------------------------------------------------------------------------
 	png_bytepp pngBuff;
-	pngBuff = new png_byte*[tmpImg->matrixSize->height];
+	pngBuff = new png_byte*[height];
 
 	int chNum = 3;
 
-	unsigned long** srcData = (unsigned long**)tmpImg->array3D[ch];
-
-	for(int j=0; j<tmpImg->matrixSize->height; j++)
+	for(int j=0; j<height; j++)
 	{
-		pngBuff[j] = new png_byte[tmpImg->matrixSize->width * chNum];
+		pngBuff[j] = new png_byte[width * chNum];
 
-		for(int i=0; i<tmpImg->matrixSize->width; i++)
+		for(int i=0; i<width; i++)
 		{
-			unsigned long pixelVal = srcData[j][i];
+			if(type == RGB_COLOR)
+			{
+				int pos = (j * width + i) * 3;	
+
+				pngBuff[j][i * chNum + 0] = img[pos];		// red
+				pngBuff[j][i * chNum + 1] = img[pos + 1];	// green
+				pngBuff[j][i * chNum + 2] = img[pos + 2];	// blue
+			}
+			else  // GLAY_SCALE
+			{
+				unsigned char pixelVal = img[j * width + i];
 			
-			pngBuff[j][i * chNum + 0] = (unsigned char)((pixelVal >> 24) % 256);	// red
-			pngBuff[j][i * chNum + 1] = (unsigned char)((pixelVal >> 16) % 256);	// green
-			pngBuff[j][i * chNum + 2] = (unsigned char)((pixelVal >> 8)  % 256);	// blue
+				pngBuff[j][i * chNum + 0] = pixelVal;	// red
+				pngBuff[j][i * chNum + 1] = pixelVal;	// green
+				pngBuff[j][i * chNum + 2] = pixelVal;	// blue
+			}
 		}
 	}
 	//----------------------------------------------------------------------------------------------
@@ -149,10 +139,8 @@ CircusCS_SavePNG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int compressLeve
 	fclose(fp);
 	//----------------------------------------------------------------------------------------------
 
-	for(int j=0; j<tmpImg->matrixSize->height; j++)		delete [] pngBuff[j];
+	for(int j=0; j<height; j++)		delete [] pngBuff[j];
 	delete [] pngBuff;
-
-	VOL_DeleteRawImageData(tmpImg);
 
 	return 0;
 }

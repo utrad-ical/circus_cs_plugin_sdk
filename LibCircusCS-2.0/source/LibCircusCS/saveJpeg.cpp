@@ -10,6 +10,7 @@
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -25,32 +26,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-CircusCS_SaveJPEG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int quality)
+CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int height, int type, int quality)
 {
-
 	if(quality < JPEG_QUALITY_MIN || quality > JPEG_QUALITY_MAX)  quality = JPEG_QUALITY_MAX;
 
-	if(!((img->pixelType[ch] == VOL_VALUETYPE_RGBA)
-		 || (img->pixelType[ch] == VOL_VALUETYPE_SINGLE && img->pixelUnit[ch] == VOL_VALUEUNIT_UINT8)))
+	//----------------------------------------------------------------------------------------------
+	// Open file
+	//----------------------------------------------------------------------------------------------
+	FILE* fp = fopen(fileName, "wb");
+	if(!fp)
 	{
+		fprintf(stderr, "Fail to open file: %s\n", fileName);
 		return -1;
 	}
-
-	VOL_RAWIMAGEDATA* tmpImg = VOL_DuplicateRawImageData(img);
-
-	if(img->pixelType[ch] == VOL_VALUETYPE_SINGLE && img->pixelUnit[ch] == VOL_VALUEUNIT_UINT8)
-	{
-		VOL_DuplicateChannelOfRawImageData(tmpImg, ch);
-		VOL_DuplicateChannelOfRawImageData(tmpImg, ch);
-
-		// Set alpha channel
-		VOL_AddNewChannelInRawImageData(tmpImg, VOL_VALUEUNIT_UINT8, VOL_VALUETYPE_SINGLE);
-
-		VOL_ChangeColorTypeOfRgbaRawImageData(tmpImg);
-	}
-
-	FILE* fp = fopen(fileName, "wb");
-	if(!fp)		return -1;
+	//----------------------------------------------------------------------------------------------
 
 	jpeg_compress_struct jpegStruct;    // Structure for JPEG compression
 	jpeg_error_mgr jpegErr;				// Structure for error process
@@ -60,8 +49,8 @@ CircusCS_SaveJPEG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int quality)
 
 	jpeg_stdio_dest(&jpegStruct, fp);
 
-	jpegStruct.image_width  = tmpImg->matrixSize->width;
-	jpegStruct.image_height = tmpImg->matrixSize->height;
+	jpegStruct.image_width  = width;
+	jpegStruct.image_height = height;
 	jpegStruct.input_components = 3;
 	jpegStruct.in_color_space = JCS_RGB;
 	jpeg_set_defaults(&jpegStruct);
@@ -69,22 +58,33 @@ CircusCS_SaveJPEG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int quality)
 
 	jpeg_start_compress(&jpegStruct, true);
 
-	JSAMPLE* buffer = new JSAMPLE[ tmpImg->matrixSize->width * 3 ];
+	JSAMPLE* buffer = new JSAMPLE[width * 3];
 
-	unsigned long** srcData = (unsigned long**)tmpImg->array3D[ch];
+	//unsigned long** srcData = (unsigned long**)tmpImg->array3D[ch];
 	int j=0;
 
 	while(jpegStruct.next_scanline < jpegStruct.image_height)
 	{
 		JSAMPLE* bufPtr = buffer;
 
-		for(int i=0; i<tmpImg->matrixSize->width;  i++)
+		for(int i=0; i<width; i++)
 		{
-			unsigned long pixelVal = srcData[j][i];	
+			if(type == RGB_COLOR)
+			{
+				int pos = (j * width + i) * 3;	
 
-			*bufPtr++ = (JSAMPLE)((unsigned char)((pixelVal >> 24) % 256));		// red
-			*bufPtr++ =	(JSAMPLE)((unsigned char)((pixelVal >> 16) % 256));		// green
-			*bufPtr++ = (JSAMPLE)((unsigned char)((pixelVal >> 8) % 256));		// blue
+				*bufPtr++ = (JSAMPLE)img[pos];		// red
+				*bufPtr++ =	(JSAMPLE)img[pos + 1];	// green
+				*bufPtr++ = (JSAMPLE)img[pos + 2];	// blue
+			}
+			else  // GLAY_SCALE
+			{
+				unsigned char pixelVal = img[j * width + i];	
+
+				*bufPtr++ = (JSAMPLE)pixelVal;		// red
+				*bufPtr++ =	(JSAMPLE)pixelVal;		// green
+				*bufPtr++ = (JSAMPLE)pixelVal;		// blue
+			}
 		}
 		jpeg_write_scanlines( &jpegStruct, &buffer, 1 );
 		j++;
@@ -97,8 +97,6 @@ CircusCS_SaveJPEG(VOL_RAWIMAGEDATA* img, int ch, char* fileName, int quality)
 	delete [] buffer;
 
 	jpeg_destroy_compress( &jpegStruct );
-
-	VOL_DeleteRawImageData(tmpImg);
 
 	return 0;
 }

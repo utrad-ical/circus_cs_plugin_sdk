@@ -10,6 +10,7 @@
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +25,12 @@ extern "C" {
 #define JPEG_QUALITY_MIN	0
 #define JPEG_QUALITY_MAX	100
 
-int CircusCS_SaveJPEG(VOL_RAWIMAGEDATA* img, int ch, char* fileName,
-					  int quality=JPEG_QUALITY_MAX);
+int CircusCS_SaveImageAsJpeg(char* fileName,
+							unsigned char* img,
+							int width,
+							int height,
+							int type=0,						// grayscale					
+							int quality=JPEG_QUALITY_MAX);
 
 #ifdef __cplusplus
 }

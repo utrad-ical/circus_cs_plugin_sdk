@@ -17,9 +17,9 @@
 int main(int argc, char *argv[])
 {
 	// Check the number of arguments
-	if(argc != 4)
+	if(argc < 4 || argc > 5) 
 	{
-		fprintf(stderr, "[Usage] measurement_v.1.exe jobRootPath seriesNum coreNum\n");	
+		fprintf(stderr, "[Usage] measurement_v.1.exe jobRootPath seriesNum coreNum (environment)\n");	
 		return -1;
 	}
 

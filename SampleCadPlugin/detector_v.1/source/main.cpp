@@ -2,11 +2,9 @@
 
 #include<stdio.h>
 
-#include "VOL.h"
 #include "LibCircusCS.h"
 
 #include "detector.h"
-#include "results.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -14,9 +12,9 @@
 int main(int argc, char *argv[])
 {
 	// Check the number of arguments
-	if(argc != 4)
+	if(argc < 4 || argc > 5) 
 	{
-		fprintf(stderr, "[Usage] detector_v.1.exe jobRootPath seriesNum coreNum\n");	
+		fprintf(stderr, "[Usage] detector_v.1.exe jobRootPath seriesNum coreNum (environment)\n");	
 		return -1;
 	}
 
@@ -29,13 +27,8 @@ int main(int argc, char *argv[])
 	int coreNum = atoi(argv[3]);
 
 	// CAD detector
-	VOL_INTBOX3D* cropBox = VOL_NewIntBox3D(VOL_NewIntVector3D(0,0,0), VOL_NewIntSize3D(0,0,0));
-	VOL_MATRIX* detectResult = detectorMain(jobRootPath, cropBox, coreNum);
+	int candNum = detectorMain(jobRootPath, coreNum);
 
-	// Create result files
-	createResultFiles(jobRootPath, detectResult, cropBox);
-
-	VOL_DeleteMatrix(detectResult);
 
 	return 0;
 }

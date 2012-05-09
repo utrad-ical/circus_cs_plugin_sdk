@@ -3,14 +3,16 @@
 //
 //		LibCircusCS : library for CIRCUS CS plug-in development 
 //
-//			intensityProjection.private.h : for creating intensity projectionbimage
+//			imageUtility.private.h : utility for VOL_RAWIMAGEDATA 
 //
 //			main coder: Y. Nomura
 //
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
+
 

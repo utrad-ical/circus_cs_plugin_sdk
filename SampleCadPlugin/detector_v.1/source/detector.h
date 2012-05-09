@@ -5,9 +5,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-VOL_MATRIX* detectorMain(char* jobRootPath,
-						 VOL_INTBOX3D* cropBox,
-						 int coreNum);
+int detectorMain(char* jobRootPath, int coreNum);
 
 
 #ifdef __cplusplus

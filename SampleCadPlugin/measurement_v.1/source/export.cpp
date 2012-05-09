@@ -19,40 +19,52 @@
 
 int
 exportImageFilesFromVolumeData(char* jobRootPath,
-							   VOL_RAWVOLUMEDATA* orgVolume,
-							   VOL_RAWVOLUMEDATA* resultVolume)
+							   short* orgVolume,
+							   unsigned char* resultVolume,
+							   CircusCS_INTSIZE3D* matrixSize)
 {
 
-	if(orgVolume->matrixSize->depth != resultVolume->matrixSize->depth)
-	{
-		return -1;
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
-	//  Export image files
+	//  Export image files (as PNG file)
 	//------------------------------------------------------------------------------------------------------------------
 	char orgFname[1024], resFname[1024];
+	int  length = matrixSize->width * matrixSize->height;
 
-	VOL_INTSIZE3D* orgMatrix = VOL_GetIntSize3DFromIntSize4D(orgVolume->matrixSize);
-
-	for(int k=0; k<orgMatrix->depth; k++)
+	for(int k=0; k<matrixSize->depth; k++)
 	{
-		VOL_RAWIMAGEDATA* orgImg = CircusCS_ExtractSingleSliceFromRawVolumeData(orgVolume,    0, k, AXIAL_SECTION);
-		VOL_RAWIMAGEDATA* resImg = CircusCS_ExtractSingleSliceFromRawVolumeData(resultVolume, 0, k, AXIAL_SECTION);
+		short*  orgImg = CircusCS_ExtractSingleSliceFromVolumeDataAsSint16(orgVolume, matrixSize, k, AXIAL_SECTION);
 
 		// Set window level and window width (original data) 
-		CircusCS_SetWindowAndConvertToUint8Image(orgImg, 0, WINDOW_LEVEL, WINDOW_WIDTH);
+		unsigned char* orgImgUint8 = CircusCS_SetWindowAndConvertToUint8ImageFromSint16(orgImg,
+																						length,
+																						WINDOW_LEVEL,
+																						WINDOW_WIDTH);
+		// Export original image
+		sprintf(orgFname, "%s\\org%04d.png", jobRootPath, k+1);
+		CircusCS_SaveImageAsPng(orgFname, orgImgUint8, matrixSize->width, matrixSize->height);
 
-		// Set file name
-		sprintf(orgFname, "%s\\org%04d.png",    jobRootPath, k+1);
-		sprintf(resFname, "%s\\result%04d.png", jobRootPath, k+1);
+		free(orgImg);
+		free(orgImgUint8);
 		
-		// Export as PNG file
-		CircusCS_SavePNG(orgImg, 0, orgFname);
-		CircusCS_SavePNG(resImg, 0, resFname);
 
-		VOL_DeleteRawImageData(orgImg);
-		VOL_DeleteRawImageData(resImg);
+		unsigned char* resultImg = (unsigned char*)calloc(length*3, sizeof(unsigned char));
+			
+		for(int j=0; j<matrixSize->height; j++)
+		for(int i=0; i<matrixSize->width;  i++)
+		{
+			int pos2D = j*matrixSize->width + i;
+			int pos3D = k*matrixSize->height*matrixSize->width + j*matrixSize->width + i;
+
+			resultImg[pos2D * 3]     = resultVolume[pos3D * 3]; 
+			resultImg[pos2D * 3 + 1] = resultVolume[pos3D * 3 + 1]; 
+			resultImg[pos2D * 3 + 2] = resultVolume[pos3D * 3 + 2]; 
+		}
+
+		// Export result image
+		sprintf(resFname, "%s\\result%04d.png", jobRootPath, k+1);
+		CircusCS_SaveImageAsPng(resFname, resultImg, matrixSize->width, matrixSize->height, RGB_COLOR);
+
+		free(resultImg);
 
 	} // end for
 	//------------------------------------------------------------------------------------------------------------------

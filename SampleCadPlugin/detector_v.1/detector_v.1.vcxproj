@@ -118,10 +118,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../VOL-1.2/source;../../LibCircusCS-1.0/source;../../libjpeg/include;../../libpng-1.2.46/include;../../zlib-1.25/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../LibCircusCS-2.0/source;../../libjpeg/include;../../libpng-1.2.46/include;../../zlib-1.25/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>LibCircusCS-1.0.lib;vol-1.2.lib;zlib.lib;libpng.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibCircusCS-2.0.lib;zlib.lib;libpng.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -131,7 +131,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>../../VOL-1.2/library/$(Platform);../../LibCircusCS-1.0/library/$(Platform);../../libjpeg/library/$(Platform);../../libpng-1.2.46/library/$(Platform);../../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../LibCircusCS-2.0/library/$(Platform);../../libjpeg/library/$(Platform);../../libpng-1.2.46/library/$(Platform);../../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -172,10 +172,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../VOL-1.2/source;../../LibCircusCS-1.0/source;../../libjpeg/include;../../libpng-1.2.46/include;../../zlib-1.25/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../LibCircusCS-2.0/source;../../libjpeg/include;../../libpng-1.2.46/include;../../zlib-1.25/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>LibCircusCS-1.0.lib;vol-1.2.lib;zlib.lib;libpng.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibCircusCS-2.0.lib;zlib.lib;libpng.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -185,17 +185,15 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>../../VOL-1.2/library/$(Platform);../../LibCircusCS-1.0/library/$(Platform);../../libjpeg/library/$(Platform);../../libpng-1.2.46/library/$(Platform);../../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../LibCircusCS-2.0/library/$(Platform);../../libjpeg/library/$(Platform);../../libpng-1.2.46/library/$(Platform);../../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\detector.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\results.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\detector.h" />
-    <ClInclude Include="source\results.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

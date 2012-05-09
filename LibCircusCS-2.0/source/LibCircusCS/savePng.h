@@ -3,38 +3,39 @@
 //
 //		LibCircusCS : library for CIRCUS CS plug-in development 
 //
-//			intensityProjection.h : for creating intensity projectionbimage
+//			savePng.h : save PNG file (using VOL_RAWIMAGEDATA)  
 //
 //			main coder: Y. Nomura
 //
 //			update history
 //
 //			2011.03.23	start coding
+//			2012.05.08  rewrite without VOL library
 //
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-#ifndef INTENSITY_PROJECTION_H
+#ifndef SAVE_PNG_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-// Projection mode
-#define MAX_INTENSITY   0
-#define MEAN_INTENSITY  1
+#define COMPRESSION_LEVEL_MIN	1	// Z_BEST_SPEED
+#define COMPRESSION_LEVEL_MAX	9	// Z_BEST_COMPRESSION
 
-VOL_RAWIMAGEDATA* CircusCS_CreateIntensityProjection(VOL_RAWVOLUMEDATA* volume, int ch, int mode, int section);
+int CircusCS_SaveImageAsPng(char* fileName,
+							unsigned char* img,
+							int width,
+							int height,
+							int type=0,									// grayscale										
+							int compressLevel=COMPRESSION_LEVEL_MAX);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-
-
 #endif
 
-
-#define INTENSITY_PROJECTION_H
+#define SAVE_PNG_H
