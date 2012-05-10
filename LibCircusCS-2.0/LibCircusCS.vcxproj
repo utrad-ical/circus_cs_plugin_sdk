@@ -69,11 +69,11 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">library\$(Platform)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">library\$(Platform)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -113,7 +113,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>library\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -148,7 +148,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Lib>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>library\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>../libjpeg/library/$(Platform);../libpng-1.2.46/library/$(Platform);../zlib-1.25/library/$(Platform)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

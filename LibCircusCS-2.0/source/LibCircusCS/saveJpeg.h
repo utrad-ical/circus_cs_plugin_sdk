@@ -15,12 +15,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef SAVE_JPEG_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
 #define JPEG_QUALITY_MIN	0
 #define JPEG_QUALITY_MAX	100
@@ -29,12 +24,8 @@ int CircusCS_SaveImageAsJpeg(char* fileName,
 							unsigned char* img,
 							int width,
 							int height,
-							int type=0,						// grayscale					
+							int pixelType=PIXEL_TYPE_GLAYSCALE,					
 							int quality=JPEG_QUALITY_MAX);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif
 

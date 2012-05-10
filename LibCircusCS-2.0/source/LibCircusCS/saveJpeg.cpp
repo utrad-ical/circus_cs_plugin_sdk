@@ -69,7 +69,7 @@ CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int heig
 
 		for(int i=0; i<width; i++)
 		{
-			if(type == RGB_COLOR)
+			if(type == PIXEL_TYPE_RGB_COLOR)
 			{
 				int pos = (j * width + i) * 3;	
 
@@ -77,7 +77,7 @@ CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int heig
 				*bufPtr++ =	(JSAMPLE)img[pos + 1];	// green
 				*bufPtr++ = (JSAMPLE)img[pos + 2];	// blue
 			}
-			else  // GLAY_SCALE
+			else  // PIXEL_TYPE_GLAYSCALE
 			{
 				unsigned char pixelVal = img[j * width + i];	
 

@@ -5,8 +5,9 @@
 #include <string>
 
 #include "LibCircusCS.h"
-
 #include "detector.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define RESULT_WINDOW_LEVEL 0
 #define RESULT_WINDOW_WIDTH 0
@@ -47,7 +48,7 @@ detectorMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
 	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
-	short* volume = CircusCS_LoadRawVolumeFileAsSint16(inVolumeFname, length);
+	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{

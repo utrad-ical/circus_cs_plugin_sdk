@@ -3,8 +3,9 @@
 #include <stdio.h>
 
 #include "LibCircusCS.h"
-
 #include "visualization.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define LOG_FNAME      "job.log"
 #define RESULTS_FNAME  "visualization_v.1.txt"
@@ -42,7 +43,7 @@ visualizationMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
 	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
-	short* volume = CircusCS_LoadRawVolumeFileAsSint16(inVolumeFname, length);
+	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{
@@ -59,28 +60,28 @@ visualizationMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFname, "Create MIP images");
 
 	// Create MIP image
-	short* axialMip = CircusCS_CreateIntensityProjectionAsSint16(volume,
-																 dcmTagData->matrixSize,
-																 MAX_INTENSITY,
-																 AXIAL_SECTION);
-	short* coroMip  = CircusCS_CreateIntensityProjectionAsSint16(volume,
-		                                                         dcmTagData->matrixSize,
-																 MAX_INTENSITY,
-																 CORONAL_SECTION);
-	short* sagiMip  = CircusCS_CreateIntensityProjectionAsSint16(volume,
-		                                                         dcmTagData->matrixSize,
-																 MAX_INTENSITY,
-																 SAGITTAL_SECTION);
+	short* axialMip = CircusCS_CreateIntensityProjection<short>(volume,
+																dcmTagData->matrixSize,
+																MAX_INTENSITY,
+																AXIAL_SECTION);
+	short* coroMip  = CircusCS_CreateIntensityProjection<short>(volume,
+		                                                        dcmTagData->matrixSize,
+																MAX_INTENSITY,
+																CORONAL_SECTION);
+	short* sagiMip  = CircusCS_CreateIntensityProjection<short>(volume,
+		                                                        dcmTagData->matrixSize,
+																MAX_INTENSITY,
+																SAGITTAL_SECTION);
 
 	// Set window level and window width (convert to Uint8) 
 	length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height;
-	unsigned char* axialImg = CircusCS_SetWindowAndConvertToUint8ImageFromSint16(axialMip, length, 0, 0);
+	unsigned char* axialImg = CircusCS_SetWindowAndConvertToUint8Image<short>(axialMip, length, 0, 0);
 
 	length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->depth;
-	unsigned char* coroImg = CircusCS_SetWindowAndConvertToUint8ImageFromSint16(coroMip, length, 0, 0);
+	unsigned char* coroImg = CircusCS_SetWindowAndConvertToUint8Image<short>(coroMip, length, 0, 0);
 
 	length = dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
-	unsigned char* sagiImg  = CircusCS_SetWindowAndConvertToUint8ImageFromSint16(sagiMip, length, 0, 0);
+	unsigned char* sagiImg  = CircusCS_SetWindowAndConvertToUint8Image<short>(sagiMip, length, 0, 0);
 
 	free(axialMip);
 	free(coroMip);

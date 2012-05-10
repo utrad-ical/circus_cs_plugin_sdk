@@ -29,14 +29,6 @@
 
 #define MAX_STRING_LENGTH	2048
 
-// Section
-#define AXIAL_SECTION		0
-#define CORONAL_SECTION		1
-#define SAGITTAL_SECTION	2
-
-// Image type
-#define GLAY_SCALE		0
-#define RGB_COLOR		1
 
 
 

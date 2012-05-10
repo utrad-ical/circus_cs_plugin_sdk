@@ -22,21 +22,10 @@
 #define MIN_INTENSITY   1
 #define MEAN_INTENSITY  2
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-unsigned char*  CircusCS_CreateIntensityProjectionAsUint8(unsigned char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-char*           CircusCS_CreateIntensityProjectionAsSint8(char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-unsigned short* CircusCS_CreateIntensityProjectionAsUint16(unsigned short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-short*          CircusCS_CreateIntensityProjectionAsSint16(short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-unsigned int*   CircusCS_CreateIntensityProjectionAsUint32(unsigned int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-int*            CircusCS_CreateIntensityProjectionAsSint32(int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+template <typename VARTYPE> VARTYPE* CircusCS_CreateIntensityProjection(VARTYPE* volume,
+                                                                        CircusCS_INTSIZE3D* matrix3D,
+																		int mode,
+																		int section);
 
 #endif
 

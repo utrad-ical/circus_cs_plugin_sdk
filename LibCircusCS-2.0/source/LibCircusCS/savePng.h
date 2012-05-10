@@ -18,10 +18,6 @@
 
 #ifndef SAVE_PNG_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #define COMPRESSION_LEVEL_MIN	1	// Z_BEST_SPEED
 #define COMPRESSION_LEVEL_MAX	9	// Z_BEST_COMPRESSION
 
@@ -29,12 +25,8 @@ int CircusCS_SaveImageAsPng(char* fileName,
 							unsigned char* img,
 							int width,
 							int height,
-							int type=0,									// grayscale										
+							int type=PIXEL_TYPE_GLAYSCALE,										
 							int compressLevel=COMPRESSION_LEVEL_MAX);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif
 

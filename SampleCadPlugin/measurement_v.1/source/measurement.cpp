@@ -46,7 +46,7 @@ measurmentMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
 	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
-	short* volume = CircusCS_LoadRawVolumeFileAsSint16(inVolumeFname, length);
+	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{

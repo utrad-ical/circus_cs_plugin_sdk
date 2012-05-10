@@ -23,9 +23,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename VARTYPE> VARTYPE*  
-CircusCS_LoadRawVolumeFile(char* fileName, int size)
+CircusCS_LoadRawVolumeFile(char* fileName, int length)
 {
-	VARTYPE* ret = (VARTYPE*)calloc(size, sizeof(VARTYPE));
+	VARTYPE* ret = (VARTYPE*)calloc(length, sizeof(VARTYPE));
 
 	if(ret == NULL)
 	{
@@ -41,53 +41,16 @@ CircusCS_LoadRawVolumeFile(char* fileName, int size)
 	}
 	else
 	{
-		fread((char *)ret, sizeof(VARTYPE), size, fp);
+		fread((char *)ret, sizeof(VARTYPE), length, fp);
 		fclose(fp);
 	}
 
 	return ret;
 }
 
-
-unsigned char*
-CircusCS_LoadRawVolumeFileAsUint8(char* fileName, int size)
-{
-	unsigned char* ret = CircusCS_LoadRawVolumeFile<unsigned char>(fileName, size);
-	return ret;
-}
-
-char*
-CircusCS_LoadRawVolumeFileAsSint8(char* fileName, int size)
-{
-	char* ret = CircusCS_LoadRawVolumeFile<char>(fileName, size);
-	return ret;
-}
-
-unsigned short*
-CircusCS_LoadRawVolumeFileAsUint16(char* fileName, int size)
-{
-	unsigned short* ret = CircusCS_LoadRawVolumeFile<unsigned short>(fileName, size);
-	return ret;
-}
-
-short*
-CircusCS_LoadRawVolumeFileAsSint16(char* fileName, int size)
-{
-	short* ret = CircusCS_LoadRawVolumeFile<short>(fileName, size);
-	return ret;
-}
-
-unsigned int*
-CircusCS_LoadRawVolumeFileAsUint32(char* fileName, int size)
-{
-	unsigned int* ret = CircusCS_LoadRawVolumeFile<unsigned int>(fileName, size);
-	return ret;
-}
-
-int*
-CircusCS_LoadRawVolumeFileAsSint32(char* fileName, int size)
-{
-	int* ret = CircusCS_LoadRawVolumeFile<int>(fileName, size);
-	return ret;
-}
-
+template unsigned char*  CircusCS_LoadRawVolumeFile<unsigned char>(char* fileName, int length);
+template char*           CircusCS_LoadRawVolumeFile<char>(char* fileName, int length);
+template unsigned short* CircusCS_LoadRawVolumeFile<unsigned short>(char* fileName, int length);
+template short*          CircusCS_LoadRawVolumeFile<short>(char* fileName, int length);
+template unsigned int*   CircusCS_LoadRawVolumeFile<unsigned int>(char* fileName, int length);
+template int*            CircusCS_LoadRawVolumeFile<int>(char* fileName, int length);

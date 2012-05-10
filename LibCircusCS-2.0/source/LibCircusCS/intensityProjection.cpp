@@ -231,125 +231,31 @@ CreateMeanIntensityProjection(VARTYPE* volume, CircusCS_INTSIZE3D* matrix3D, int
 	return ret;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned char*
-CircusCS_CreateIntensityProjectionAsUint8(unsigned char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
+template <typename VARTYPE> VARTYPE*
+CircusCS_CreateIntensityProjection(VARTYPE* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
 {
 	switch(mode)
 	{
 		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<unsigned char>(volume, matrix3D, section);
+				return CreateMaxIntensityProjection<VARTYPE>(volume, matrix3D, section);
 				break;
 		
 		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<unsigned char>(volume, matrix3D, section);
+				return CreateMinIntensityProjection<VARTYPE>(volume, matrix3D, section);
 				break;
 
 		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<unsigned char>(volume, matrix3D, section);
+				return CreateMeanIntensityProjection<VARTYPE>(volume, matrix3D, section);
 				break;
 	}
 	return NULL;
 }
 					
-char*
-CircusCS_CreateIntensityProjectionAsSint8(char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
-{
-	switch(mode)
-	{
-		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<char>(volume, matrix3D, section);
-				break;
-		
-		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<char>(volume, matrix3D, section);
-				break;
 
-		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<char>(volume, matrix3D, section);
-				break;
-	}
-	return NULL;
-}
-
-
-unsigned short*
-CircusCS_CreateIntensityProjectionAsUint16(unsigned short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
-{
-	switch(mode)
-	{
-		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<unsigned short>(volume, matrix3D, section);
-				break;
-		
-		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<unsigned short>(volume, matrix3D, section);
-				break;
-
-		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<unsigned short>(volume, matrix3D, section);
-				break;
-	}
-	return NULL;
-}
-					
-short*
-CircusCS_CreateIntensityProjectionAsSint16(short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
-{
-	switch(mode)
-	{
-		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<short>(volume, matrix3D, section);
-				break;
-		
-		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<short>(volume, matrix3D, section);
-				break;
-
-		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<short>(volume, matrix3D, section);
-				break;
-	}
-	return NULL;
-}
-
-unsigned int*
-CircusCS_CreateIntensityProjectionAsUint32(unsigned int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
-{
-	switch(mode)
-	{
-		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<unsigned int>(volume, matrix3D, section);
-				break;
-		
-		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<unsigned int>(volume, matrix3D, section);
-				break;
-
-		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<unsigned int>(volume, matrix3D, section);
-				break;
-	}
-	return NULL;
-}
-					
-int*
-CircusCS_CreateIntensityProjectionAsSint32(int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section)
-{
-	switch(mode)
-	{
-		case MAX_INTENSITY:
-				return CreateMaxIntensityProjection<int>(volume, matrix3D, section);
-				break;
-		
-		case MIN_INTENSITY:
-				return CreateMinIntensityProjection<int>(volume, matrix3D, section);
-				break;
-
-		case MEAN_INTENSITY:
-				return CreateMeanIntensityProjection<int>(volume, matrix3D, section);
-				break;
-	}
-	return NULL;
-}
+template unsigned char*  CircusCS_CreateIntensityProjection<unsigned char>(unsigned char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
+template char*           CircusCS_CreateIntensityProjection<char>(char* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
+template unsigned short* CircusCS_CreateIntensityProjection<unsigned short>(unsigned short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
+template short*          CircusCS_CreateIntensityProjection<short>(short* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
+template unsigned int*   CircusCS_CreateIntensityProjection<unsigned int>(unsigned int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);
+template int*            CircusCS_CreateIntensityProjection<int>(int* volume, CircusCS_INTSIZE3D* matrix3D, int mode, int section);

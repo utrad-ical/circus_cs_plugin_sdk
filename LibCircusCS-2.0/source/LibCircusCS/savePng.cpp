@@ -109,7 +109,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 
 		for(int i=0; i<width; i++)
 		{
-			if(type == RGB_COLOR)
+			if(type == PIXEL_TYPE_RGB_COLOR)
 			{
 				int pos = (j * width + i) * 3;	
 
@@ -117,7 +117,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 				pngBuff[j][i * chNum + 1] = img[pos + 1];	// green
 				pngBuff[j][i * chNum + 2] = img[pos + 2];	// blue
 			}
-			else  // GLAY_SCALE
+			else  // PIXEL_TYPE_GLAYSCALE
 			{
 				unsigned char pixelVal = img[j * width + i];
 			
