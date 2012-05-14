@@ -25,7 +25,7 @@ int CircusCS_SaveImageAsPng(char* fileName,
 							unsigned char* img,
 							int width,
 							int height,
-							int type=PIXEL_TYPE_GLAYSCALE,										
+							int type=CircusCS_VALUE_TYPE_SINGLE,
 							int compressLevel=COMPRESSION_LEVEL_MAX);
 
 #endif

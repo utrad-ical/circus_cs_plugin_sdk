@@ -69,7 +69,7 @@ CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int heig
 
 		for(int i=0; i<width; i++)
 		{
-			if(type == PIXEL_TYPE_RGB_COLOR)
+			if(type == CircusCS_VALUE_TYPE_RGB)
 			{
 				int pos = (j * width + i) * 3;	
 

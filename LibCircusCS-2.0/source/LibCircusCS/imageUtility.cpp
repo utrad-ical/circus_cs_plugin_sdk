@@ -83,7 +83,7 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					pos2D = j*matrix2D->width + i;
 					pos3D = sliceNum*matrix3D->height*matrix3D->width + j*matrix3D->width + i;
 
-					if(type == PIXEL_TYPE_RGB_COLOR)
+					if(type == CircusCS_VALUE_TYPE_RGB)
 					{
 						ret[pos2D * 3]     = volume[pos3D * 3];
 						ret[pos2D * 3 + 1] = volume[pos3D * 3 + 1];
@@ -105,7 +105,7 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					pos2D = k*matrix2D->width + i;
 					pos3D = k*matrix3D->height*matrix3D->width + sliceNum*matrix3D->width + i;
 
-					if(type == PIXEL_TYPE_RGB_COLOR)
+					if(type == CircusCS_VALUE_TYPE_RGB)
 					{
 						ret[pos2D * 3]     = volume[pos3D * 3];
 						ret[pos2D * 3 + 1] = volume[pos3D * 3 + 1];
@@ -127,7 +127,7 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					pos2D = k*matrix2D->width + j;
 					pos3D = k*matrix3D->height*matrix3D->width + j*matrix3D->width + sliceNum;
 
-					if(type == PIXEL_TYPE_RGB_COLOR)
+					if(type == CircusCS_VALUE_TYPE_RGB)
 					{
 						ret[pos2D * 3]     = volume[pos3D * 3];
 						ret[pos2D * 3 + 1] = volume[pos3D * 3 + 1];

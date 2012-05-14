@@ -40,7 +40,7 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 			                                                                                matrixSize,
 																							k,
 																							AXIAL_SECTION,
-																							PIXEL_TYPE_RGB_COLOR);
+																							CircusCS_VALUE_TYPE_RGB);
 
 		// Set window level and window width (original data) 
 		unsigned char* orgImgUint8 = CircusCS_SetWindowAndConvertToUint8Image<short>(orgImg,
@@ -53,14 +53,10 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 
 		free(orgImg);
 		free(orgImgUint8);
-		
-
-			
-
 
 		// Export result image
 		sprintf(resFname, "%s\\result%04d.png", jobRootPath, k+1);
-		CircusCS_SaveImageAsPng(resFname, resultImg, matrixSize->width, matrixSize->height, PIXEL_TYPE_RGB_COLOR);
+		CircusCS_SaveImageAsPng(resFname, resultImg, matrixSize->width, matrixSize->height, CircusCS_VALUE_TYPE_RGB);
 
 		free(resultImg);
 

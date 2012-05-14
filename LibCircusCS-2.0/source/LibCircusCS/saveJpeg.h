@@ -24,7 +24,7 @@ int CircusCS_SaveImageAsJpeg(char* fileName,
 							unsigned char* img,
 							int width,
 							int height,
-							int pixelType=PIXEL_TYPE_GLAYSCALE,					
+							int type=CircusCS_VALUE_TYPE_SINGLE,
 							int quality=JPEG_QUALITY_MAX);
 
 #endif

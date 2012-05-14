@@ -16,25 +16,25 @@
 
 #ifndef BASIC_PRIMITIVE_H
 
-// Section
-#define AXIAL_SECTION		0
-#define CORONAL_SECTION		1
-#define SAGITTAL_SECTION	2
-
 // Pixel unit
-#define CircusCS_PIXELUNIT_UINT8	0	// unsigned char
-#define CircusCS_PIXELUNIT_SINT8	1	// (signed) char
-#define CircusCS_PIXELUNIT_UINT16	2	// unsigned short
-#define CircusCS_PIXELUNIT_SINT16	3	// (signed) short
-#define CircusCS_PIXELUNIT_UINT32	4	// unsigned int
-#define CircusCS_PIXELUNIT_SINT32	5	// (signed) int
-#define CircusCS_PIXELUNIT_FLOAT32	6	// float
-#define CircusCS_PIXELUNIT_FLOAT64	7	// double
-#define CircusCS_PIXELUNIT_UNKNOWN -1	// unknown
+#define CircusCS_PIXELUNIT_UINT8		 0	// unsigned char
+#define CircusCS_PIXELUNIT_SINT8		 1	// (signed) char
+#define CircusCS_PIXELUNIT_UINT16		 2	// unsigned short
+#define CircusCS_PIXELUNIT_SINT16		 3	// (signed) short
+#define CircusCS_PIXELUNIT_UINT32		 4	// unsigned int
+#define CircusCS_PIXELUNIT_SINT32		 5	// (signed) int
+#define CircusCS_PIXELUNIT_FLOAT32		 6	// float
+#define CircusCS_PIXELUNIT_FLOAT64		 7	// double
+#define CircusCS_PIXELUNIT_UNKNOWN		-1	// unknown
 
-// Pixel type
-#define PIXEL_TYPE_GLAYSCALE		0
-#define PIXEL_TYPE_RGB_COLOR		1
+// Value type
+#define CircusCS_VALUE_TYPE_SINGLE		 0
+#define CircusCS_VALUE_TYPE_RGB			 1
+
+// Section
+#define AXIAL_SECTION					 0
+#define CORONAL_SECTION					 1
+#define SAGITTAL_SECTION				 2
 
 
 typedef struct Size2D		{ float	width, height; }			CircusCS_SIZE2D;
