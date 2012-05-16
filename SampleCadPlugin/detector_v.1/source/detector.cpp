@@ -33,8 +33,8 @@ detectorMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load DICOM dump data");
 
-	CircusCS_BASICDCMTAGVALUES* dcmTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
-	if(dcmTagData == NULL)
+	CircusCS_BASICDCMTAGVALUES* dcmBasicTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
+	if(dcmBasicTagData == NULL)
 	{
 		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
 		CircusCS_AppendLogFile(logFname, buffer);
@@ -47,14 +47,16 @@ detectorMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
-	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
+	int length = dcmBasicTagData->matrixSize->width
+			   * dcmBasicTagData->matrixSize->height
+			   * dcmBasicTagData->matrixSize->depth;
 	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{
 		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
 		CircusCS_AppendLogFile(logFname, buffer);
-		CircusCS_DeleteBasicDcmTagValues(dcmTagData);
+		CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 		return -1;
 	}
 	//------------------------------------------------------------------------------------------------------------------
@@ -74,11 +76,11 @@ detectorMain(char* jobRootPath, int coreNum)
 
 	for(int i=0; i<candidateNum; i++)
 	{
-		data[i][0] = (float)dcmTagData->matrixSize->width/2.0f + tmpPos;      // location_x	
-		data[i][1] = data[i][0] + 5.0f;	                                    // location_y
-		data[i][2] = (float)(dcmTagData->matrixSize->depth * (i + 2))/10.0f;  // location_z
-		data[i][3] = (float)(i * 10);                                         // volume [voxels]
-		data[i][4] = confidence;                                              // confidence
+		data[i][0] = (float)dcmBasicTagData->matrixSize->width/2.0f + tmpPos;		// location_x	
+		data[i][1] = data[i][0] + 5.0f;												// location_y
+		data[i][2] = (float)(dcmBasicTagData->matrixSize->depth * (i + 2))/10.0f;	// location_z
+		data[i][3] = (float)(i * 10);												// volume [voxels]
+		data[i][4] = confidence;													// confidence
 	
 		confidence *= 0.9f;
 		tmpPos *= -2.0f;
@@ -97,21 +99,21 @@ detectorMain(char* jobRootPath, int coreNum)
 		{
 			sprintf(buffer, "Fail to write attiributes: %s", outFname);
 			CircusCS_AppendLogFile(logFname, buffer);
-			CircusCS_DeleteBasicDcmTagValues(dcmTagData);
+			CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 			free(volume);
 			return -1;
 		}
 
-		fprintf(fp, "voxel_size_x, %f\n", dcmTagData->voxelSize_mm->width);
-		fprintf(fp, "voxel_size_y, %f\n", dcmTagData->voxelSize_mm->height);
-		fprintf(fp, "voxel_size_z, %f\n", dcmTagData->voxelSize_mm->depth);
+		fprintf(fp, "voxel_size_x, %f\n", dcmBasicTagData->voxelSize_mm->width);
+		fprintf(fp, "voxel_size_y, %f\n", dcmBasicTagData->voxelSize_mm->height);
+		fprintf(fp, "voxel_size_z, %f\n", dcmBasicTagData->voxelSize_mm->depth);
 
 		fprintf(fp, "crop_org_x,  %d\n", 0);
 		fprintf(fp, "crop_org_y,  %d\n", 0);
 		fprintf(fp, "crop_org_z,  %d\n", 0);
-		fprintf(fp, "crop_width,  %d\n", dcmTagData->matrixSize->width);
-		fprintf(fp, "crop_height, %d\n", dcmTagData->matrixSize->height);
-		fprintf(fp, "crop_depth,  %d\n", dcmTagData->matrixSize->depth);
+		fprintf(fp, "crop_width,  %d\n", dcmBasicTagData->matrixSize->width);
+		fprintf(fp, "crop_height, %d\n", dcmBasicTagData->matrixSize->height);
+		fprintf(fp, "crop_depth,  %d\n", dcmBasicTagData->matrixSize->depth);
 	
 		fprintf(fp, "window_level, %d\n", RESULT_WINDOW_LEVEL);
 		fprintf(fp, "window_width, %d\n", RESULT_WINDOW_WIDTH);
@@ -125,6 +127,8 @@ detectorMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Save detector results (detector_v.1.txt)");
 	{
+		CircusCS_DCMDUMPDATA* dcmDumpData = CircusCS_LoadDcmDumpFile(inDumpFname);
+
 		sprintf(outFname, "%s\\%s", jobRootPath, RESULTS_FNAME);
 		FILE* fp = fopen(outFname, "w");
 	
@@ -132,22 +136,20 @@ detectorMain(char* jobRootPath, int coreNum)
 		{
 			sprintf(buffer, "Fail to write detector results: %s", outFname);
 			CircusCS_AppendLogFile(logFname, buffer);
-			CircusCS_DeleteBasicDcmTagValues(dcmTagData);
+			CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 			free(volume);
 			return -1;
 		}
 
-		double voxelVolume = dcmTagData->matrixSize->width
-							* dcmTagData->matrixSize->height
-							* dcmTagData->matrixSize->depth;
+		double voxelVolume = dcmBasicTagData->matrixSize->width
+							* dcmBasicTagData->matrixSize->height
+							* dcmBasicTagData->matrixSize->depth;
 
 		for(int n=0; n<candidateNum; n++)
 		{
-			// Get image number / slice location of lesion candidate from DICOM dump
-			int imgNum = 0;
+			// Get slice location of lesion candidate from DICOM dump
 			float sliceLocation = 0.0f;
-			
-			//CircusCS_GetSliceLocationOfDumpData(dcmDumpData, &sliceLocation, (int)data[n][2]);
+			CircusCS_GetSliceLocationOfDumpData(dcmDumpData, &sliceLocation, (int)data[n][2]);
 
 			fprintf(fp, "%d, %d, %d, %d, %.2f, %.2f, %f\n", n+1,
 								                            (int)data[n][0],
@@ -160,13 +162,15 @@ detectorMain(char* jobRootPath, int coreNum)
 		} // end for	
 
 		fclose(fp);
+
+		CircusCS_DeleteDcmDumpData(dcmDumpData);
 	}
 	//------------------------------------------------------------------------------------------------------------------
 
 	CircusCS_AppendLogFile(logFname, "Finished");
 
-	CircusCS_DeleteBasicDcmTagValues(dcmTagData);
 	free(volume);
+	CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 
 	return candidateNum;
 }

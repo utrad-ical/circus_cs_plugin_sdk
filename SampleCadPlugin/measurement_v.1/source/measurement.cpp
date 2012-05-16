@@ -31,8 +31,8 @@ measurmentMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load DICOM dump data");
 
-	CircusCS_BASICDCMTAGVALUES* dcmTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
-	if(dcmTagData == NULL)
+	CircusCS_BASICDCMTAGVALUES* dcmBasicTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
+	if(dcmBasicTagData == NULL)
 	{
 		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
 		CircusCS_AppendLogFile(logFname, buffer);
@@ -45,14 +45,16 @@ measurmentMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
-	int length = dcmTagData->matrixSize->width * dcmTagData->matrixSize->height * dcmTagData->matrixSize->depth;
+	int length = dcmBasicTagData->matrixSize->width
+			   * dcmBasicTagData->matrixSize->height
+			   * dcmBasicTagData->matrixSize->depth;
 	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{
 		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
 		CircusCS_AppendLogFile(logFname, buffer);
-		CircusCS_DeleteBasicDcmTagValues(dcmTagData);
+		CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 		return -1;
 	}
 	//------------------------------------------------------------------------------------------------------------------
@@ -82,12 +84,12 @@ measurmentMain(char* jobRootPath, int coreNum)
 
 	short threshold = 100;
 
-	for(int k=0; k<dcmTagData->matrixSize->depth;  k++)
-	for(int j=0; j<dcmTagData->matrixSize->height; j++)
-	for(int i=0; i<dcmTagData->matrixSize->width;  i++)
+	for(int k=0; k<dcmBasicTagData->matrixSize->depth;  k++)
+	for(int j=0; j<dcmBasicTagData->matrixSize->height; j++)
+	for(int i=0; i<dcmBasicTagData->matrixSize->width;  i++)
 	{
-		int pos = k * dcmTagData->matrixSize->height * dcmTagData->matrixSize->width
-			    + j * dcmTagData->matrixSize->width + i;
+		int pos = k * dcmBasicTagData->matrixSize->height * dcmBasicTagData->matrixSize->width
+			    + j * dcmBasicTagData->matrixSize->width + i;
 
 		if(volume[pos] < min) min  = volume[pos];
 		if(volume[pos] > max) max  = volume[pos];
@@ -122,10 +124,11 @@ measurmentMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Export image files from volume data (axial section)");
 
-	exportImageFilesFromVolumeData(jobRootPath, volume, resultVolume, dcmTagData->matrixSize);
+	exportImageFilesFromVolumeData(jobRootPath, volume, resultVolume, dcmBasicTagData->matrixSize);
 
 	free(volume);
 	free(resultVolume);
+	CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
 	//------------------------------------------------------------------------------------------------------------------
 
 	CircusCS_AppendLogFile(logFname, "Finished");
