@@ -24,7 +24,7 @@ template <typename VARTYPE> VARTYPE* CircusCS_ExtractSingleSliceFromVolumeData(V
                                                                                CircusCS_INTSIZE3D* matrix3D,
 																			   int sliceNum,
 																			   int section,
-																			   int type=CircusCS_VALUE_TYPE_SINGLE);
+																			   int type=CircusCS_VALUETYPE_SINGLE);
 
 template <typename VARTYPE> unsigned char* CircusCS_SetWindowAndConvertToUint8Image(VARTYPE* img,
                                                                                     int length,

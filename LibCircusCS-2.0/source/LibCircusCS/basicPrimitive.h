@@ -17,19 +17,19 @@
 #ifndef BASIC_PRIMITIVE_H
 
 // Pixel unit
-#define CircusCS_PIXELUNIT_UINT8		 0	// unsigned char
-#define CircusCS_PIXELUNIT_SINT8		 1	// (signed) char
-#define CircusCS_PIXELUNIT_UINT16		 2	// unsigned short
-#define CircusCS_PIXELUNIT_SINT16		 3	// (signed) short
-#define CircusCS_PIXELUNIT_UINT32		 4	// unsigned int
-#define CircusCS_PIXELUNIT_SINT32		 5	// (signed) int
-#define CircusCS_PIXELUNIT_FLOAT32		 6	// float
-#define CircusCS_PIXELUNIT_FLOAT64		 7	// double
-#define CircusCS_PIXELUNIT_UNKNOWN		-1	// unknown
+#define CircusCS_VALUEUNIT_UINT8		 0	// unsigned char
+#define CircusCS_VALUEUNIT_SINT8		 1	// (signed) char
+#define CircusCS_VALUEUNIT_UINT16		 2	// unsigned short
+#define CircusCS_VALUEUNIT_SINT16		 3	// (signed) short
+#define CircusCS_VALUEUNIT_UINT32		 4	// unsigned int
+#define CircusCS_VALUEUNIT_SINT32		 5	// (signed) int
+#define CircusCS_VALUEUNIT_FLOAT32		 6	// float
+#define CircusCS_VALUEUNIT_FLOAT64		 7	// double
+#define CircusCS_VALUEUNIT_UNKNOWN		-1	// unknown
 
 // Value type
-#define CircusCS_VALUE_TYPE_SINGLE		 0
-#define CircusCS_VALUE_TYPE_RGB			 1
+#define CircusCS_VALUETYPE_SINGLE		 0
+#define CircusCS_VALUETYPE_RGB			 1
 
 // Section
 #define AXIAL_SECTION					 0

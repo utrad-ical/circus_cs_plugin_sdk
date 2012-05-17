@@ -433,19 +433,19 @@ CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit,
 
 	if(bits <= 8)
 	{
-		if(sign)	*pixelUnit = CircusCS_PIXELUNIT_SINT8;
-		else		*pixelUnit = CircusCS_PIXELUNIT_UINT8;
+		if(sign)	*pixelUnit = CircusCS_VALUEUNIT_SINT8;
+		else		*pixelUnit = CircusCS_VALUEUNIT_UINT8;
 		return 0;
 	}
 	else if(bits <=16)
 	{
-		if(sign)	*pixelUnit = CircusCS_PIXELUNIT_SINT16;
-		else		*pixelUnit = CircusCS_PIXELUNIT_UINT16;
+		if(sign)	*pixelUnit = CircusCS_VALUEUNIT_SINT16;
+		else		*pixelUnit = CircusCS_VALUEUNIT_UINT16;
 		return 0;
 	}
 	else
 	{
-		*pixelUnit = CircusCS_PIXELUNIT_UNKNOWN;
+		*pixelUnit = CircusCS_VALUEUNIT_UNKNOWN;
 		return -1;
 	}
 }
