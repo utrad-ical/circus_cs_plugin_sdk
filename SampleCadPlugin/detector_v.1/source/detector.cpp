@@ -145,7 +145,7 @@ detectorMain(char* jobRootPath, int coreNum)
 
 		for(int n=0; n<candidateNum; n++)
 		{
-			// Get slice location of lesion candidate from DICOM dump
+			// Get slice location of lesion candidate
 			float sliceLocation = basicTagValues->sliceLocation_mm[(int)data[n][2]];
 
 			fprintf(fp, "%d, %d, %d, %d, %.2f, %.2f, %f\n", n+1,
