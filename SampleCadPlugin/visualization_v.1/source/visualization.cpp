@@ -28,8 +28,8 @@ visualizationMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load DICOM dump data");
 
-	CircusCS_BASICDCMTAGVALUES* dcmBasicTagData = CircusCS_NewBasicDcmTagValues(inDumpFname);
-	if(dcmBasicTagData == NULL)
+	CircusCS_BASICDCMTAGVALUES* basicTagValues = CircusCS_NewBasicDcmTagValues(inDumpFname);
+	if(basicTagValues == NULL)
 	{
 		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
 		CircusCS_AppendLogFile(logFname, buffer);
@@ -42,16 +42,16 @@ visualizationMain(char* jobRootPath, int coreNum)
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFname, "Load volume data");
 
-	int length = dcmBasicTagData->matrixSize->width
-			   * dcmBasicTagData->matrixSize->height
-			   * dcmBasicTagData->matrixSize->depth;
+	int length = basicTagValues->matrixSize->width
+			   * basicTagValues->matrixSize->height
+			   * basicTagValues->matrixSize->depth;
 	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFname, length);
 
 	if(volume == NULL)
 	{
 		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
 		CircusCS_AppendLogFile(logFname, buffer);
-		CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
+		CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 		return -1;
 	}
 	//------------------------------------------------------------------------------------------------------------------
@@ -63,29 +63,29 @@ visualizationMain(char* jobRootPath, int coreNum)
 
 	// Create MIP image
 	short* axialMip = CircusCS_CreateIntensityProjection<short>(volume,
-																dcmBasicTagData->matrixSize,
+																basicTagValues->matrixSize,
 																MAX_INTENSITY,
 																AXIAL_SECTION);
 	short* coroMip  = CircusCS_CreateIntensityProjection<short>(volume,
-		                                                        dcmBasicTagData->matrixSize,
+		                                                        basicTagValues->matrixSize,
 																MAX_INTENSITY,
 																CORONAL_SECTION);
 	short* sagiMip  = CircusCS_CreateIntensityProjection<short>(volume,
-		                                                        dcmBasicTagData->matrixSize,
+		                                                        basicTagValues->matrixSize,
 																MAX_INTENSITY,
 																SAGITTAL_SECTION);
 
 	// Set window level and window width (convert to Uint8) 
-	length = dcmBasicTagData->matrixSize->width
-		   * dcmBasicTagData->matrixSize->height;
+	length = basicTagValues->matrixSize->width
+		   * basicTagValues->matrixSize->height;
 	unsigned char* axialImg = CircusCS_SetWindowAndConvertToUint8Image<short>(axialMip, length, 0, 0);
 
-	length = dcmBasicTagData->matrixSize->width
-		   * dcmBasicTagData->matrixSize->depth;
+	length = basicTagValues->matrixSize->width
+		   * basicTagValues->matrixSize->depth;
 	unsigned char* coroImg = CircusCS_SetWindowAndConvertToUint8Image<short>(coroMip, length, 0, 0);
 
-	length = dcmBasicTagData->matrixSize->height
-		   * dcmBasicTagData->matrixSize->depth;
+	length = basicTagValues->matrixSize->height
+		   * basicTagValues->matrixSize->depth;
 	unsigned char* sagiImg  = CircusCS_SetWindowAndConvertToUint8Image<short>(sagiMip, length, 0, 0);
 
 	free(axialMip);
@@ -102,16 +102,16 @@ visualizationMain(char* jobRootPath, int coreNum)
 
 	CircusCS_SaveImageAsJpeg(axialFname,
 							 axialImg,
-							 dcmBasicTagData->matrixSize->width,
-							 dcmBasicTagData->matrixSize->height);
+							 basicTagValues->matrixSize->width,
+							 basicTagValues->matrixSize->height);
 	CircusCS_SaveImageAsJpeg(coroFname,
 							 coroImg,
-							 dcmBasicTagData->matrixSize->width,
-							 dcmBasicTagData->matrixSize->depth);
+							 basicTagValues->matrixSize->width,
+							 basicTagValues->matrixSize->depth);
 	CircusCS_SaveImageAsJpeg(sagiFname,
 							 sagiImg,
-							 dcmBasicTagData->matrixSize->height,
-							 dcmBasicTagData->matrixSize->depth);
+							 basicTagValues->matrixSize->height,
+							 basicTagValues->matrixSize->depth);
 
 	free(axialImg);
 	free(coroImg);
@@ -135,7 +135,7 @@ visualizationMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFname, "Finished");
 
 	free(volume);
-	CircusCS_DeleteBasicDcmTagValues(dcmBasicTagData);
+	CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 
 	return 0;
 }

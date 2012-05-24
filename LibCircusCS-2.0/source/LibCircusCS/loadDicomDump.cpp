@@ -179,22 +179,25 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 	// Slice thickness
 	CircusCS_GetSliceThicknessOfDumpData(dumpData, &ret->sliceThickness_mm, sliceNum);
 	
-	// Origin and pitch of slice location
-	{
-		float sliceLocation0, sliceLocation1;	
-
-		CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation0, sliceNum);
-		CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation1, sliceNum+1);
-
-		ret->sliceLocationOrigin_mm = sliceLocation0;
-		ret->sliceLocationPitch_mm  = sliceLocation1 - sliceLocation0;
-	}
-
 	// Rescale slope
 	CircusCS_GetRescaleSlopeOfDumpData(dumpData, &ret->rescaleSlope, sliceNum);
 
 	// Rescale intercept
 	CircusCS_GetRescaleInterceptOfDumpData(dumpData, &ret->rescaleIntercept, sliceNum);
+
+	// slice location
+	if( (ret->sliceLocation_mm = (float*)malloc(ret->matrixSize->depth * sizeof(float))) == NULL)
+	{
+		CircusCS_DeleteSize3D(ret->voxelSize_mm);
+		CircusCS_DeleteIntSize3D(ret->matrixSize);
+		free(ret);
+		return NULL;
+	}
+
+	for(int i=0; i<ret->matrixSize->depth; i++)
+	{
+		CircusCS_GetSliceLocationOfDumpData(dumpData, &ret->sliceLocation_mm[i]);
+	}
 
 	CircusCS_DeleteDcmDumpData(dumpData);
 
@@ -207,6 +210,7 @@ CircusCS_DeleteBasicDcmTagValues(CircusCS_BASICDCMTAGVALUES* values)
 {
 	CircusCS_DeleteSize3D(values->voxelSize_mm);
 	CircusCS_DeleteIntSize3D(values->matrixSize);
+	free(values->sliceLocation_mm);
 	free(values);
 }
 

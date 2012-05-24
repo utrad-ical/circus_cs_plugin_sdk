@@ -42,8 +42,7 @@ typedef struct basicDcmTagValues
 	CircusCS_SIZE3D*    voxelSize_mm;
 	int                 pixelUnit;
 	float               sliceThickness_mm;
-	float               sliceLocationOrigin_mm;
-	float               sliceLocationPitch_mm;
+	float*              sliceLocation_mm;
 	double		        rescaleSlope;
 	double              rescaleIntercept;
 }CircusCS_BASICDCMTAGVALUES;
