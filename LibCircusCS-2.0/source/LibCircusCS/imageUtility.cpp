@@ -69,7 +69,10 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 	VARTYPE*            ret = NULL;
 	CircusCS_INTSIZE2D* matrix2D = CircusCS_GetImageSizeBySection(matrix3D, section);
 
-	if((ret = (VARTYPE*)calloc(matrix2D->width * matrix2D->height, sizeof(VARTYPE))) == NULL) return NULL;
+	int size = matrix2D->width * matrix2D->height;
+	if(type == CircusCS_VALUETYPE_RGB)  size *= 3;
+
+	if((ret = (VARTYPE*)calloc(size, sizeof(VARTYPE))) == NULL) return NULL;
 	
 	int pos2D, pos3D;
 

@@ -36,6 +36,7 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 			                                                                        matrixSize,
 																					k,
 																					AXIAL_SECTION);
+	
 		unsigned char* resultImg = CircusCS_ExtractSingleSliceFromVolumeData<unsigned char>(resultVolume,
 			                                                                                matrixSize,
 																							k,
@@ -47,6 +48,8 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 																					 length,
 																					 WINDOW_LEVEL,
 																					 WINDOW_WIDTH);
+
+
 		// Export original image
 		sprintf(orgFname, "%s\\org%04d.png", jobRootPath, k+1);
 		CircusCS_SaveImageAsPng(orgFname, orgImgUint8, matrixSize->width, matrixSize->height);
@@ -59,8 +62,7 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 		CircusCS_SaveImageAsPng(resFname, resultImg, matrixSize->width, matrixSize->height, CircusCS_VALUETYPE_RGB);
 
 		free(resultImg);
-
-	} // end for
+	}
 	//------------------------------------------------------------------------------------------------------------------
 
 	return 0;
