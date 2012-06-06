@@ -87,7 +87,7 @@ CircusCS_GetDcmTagElementOfDumpDataFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
 	{
 		ret = dumpData->data->GetValue("common", tagStr, "");
 	}
-
+	
 	return ret;
 }
 
@@ -623,7 +623,12 @@ CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dum
 
 	std::string tmpStr = CircusCS_GetDcmTagElementOfDumpDataFromTagStr(dumpData, sliceNum, tagStr);
 
-	return base64Decode(tmpStr.c_str());
+	if(tmpStr.compare(0,7,"Base64[") == 0 && tmpStr.compare(tmpStr.length()-2,1,"]"))
+	{
+		//fprintf(stderr, "%s %s\n", tagStr, tmpStr.substr(7,tmpStr.length()-8).c_str()); 
+		return base64Decode(tmpStr.substr(7,tmpStr.length()-8).c_str());
+	}
+	else return (unsigned char*)tmpStr.c_str();
 }
 
 template<typename VARTYPE>
