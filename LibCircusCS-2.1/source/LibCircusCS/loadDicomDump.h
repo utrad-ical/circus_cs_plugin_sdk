@@ -65,6 +65,173 @@ std::string CircusCS_GetDcmTagElementOfDumpDataFromTagStr(CircusCS_DCMDUMPDATA* 
 														  int sliceNum,
 														  char* tagStr);
 
+
+unsigned char*
+CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dumpData,
+										       int sliceNum,
+										       unsigned short groupWord,
+										       unsigned short elementWord);
+
+unsigned char*
+CircusCS_GetDcmTagElementOfDumpDataAsUint8ArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr);
+
+std::vector<std::string> CircusCS_GetDcmTagElementOfDumpDataAsStringArray(CircusCS_DCMDUMPDATA* dumpData,
+																		 int sliceNum,
+																		 unsigned short groupWord,
+																		 unsigned short elementWord);
+
+std::vector<std::string> CircusCS_GetDcmTagElementOfDumpDataAsStringArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																					int sliceNum,
+																					char* tagStr);
+
+
+std::vector<short> CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(CircusCS_DCMDUMPDATA* dumpData,
+																   int sliceNum,
+																   unsigned short groupWord,
+																   unsigned short elementWord);
+
+std::vector<short> CircusCS_GetDcmTagElementOfDumpDataAsSint16ArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																			  int sliceNum,
+																			  char* tagStr);
+
+
+
+std::vector<unsigned short> CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(CircusCS_DCMDUMPDATA* dumpData,
+																			int sliceNum,
+																			unsigned short groupWord,
+																			unsigned short elementWord);
+
+std::vector<unsigned short> CircusCS_GetDcmTagElementOfDumpDataAsUint16ArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																					   int sliceNum,
+																					   char* tagStr);
+
+std::vector<int> CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(CircusCS_DCMDUMPDATA* dumpData,
+																 int sliceNum,
+																 unsigned short groupWord,
+																 unsigned short elementWord);
+
+std::vector<int> CircusCS_GetDcmTagElementOfDumpDataAsSint32ArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																			int sliceNum,
+																			char* tagStr);
+
+std::vector<unsigned int> CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(CircusCS_DCMDUMPDATA* dumpData,
+																		  int sliceNum,
+																		  unsigned short groupWord,
+																		  unsigned short elementWord);
+
+std::vector<unsigned int> CircusCS_GetDcmTagElementOfDumpDataAsUint32ArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																					 int sliceNum,
+																					 char* tagStr);
+
+std::vector<float> CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(CircusCS_DCMDUMPDATA* dumpData,
+																  int sliceNum,
+																  unsigned short groupWord,
+																  unsigned short elementWord);
+
+std::vector<float> CircusCS_GetDcmTagElementOfDumpDataAsFloatArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																			 int sliceNum,
+																			 char* tagStr);
+
+std::vector<double> CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(CircusCS_DCMDUMPDATA* dumpData,
+																	int sliceNum,
+																	unsigned short groupWord,
+																	unsigned short elementWord);
+
+std::vector<double> CircusCS_GetDcmTagElementOfDumpDataAsDoubleArrayFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																			   int sliceNum,
+																			   char* tagStr);
+
+std::string CircusCS_GetDcmTagElementOfDumpDataAsString(CircusCS_DCMDUMPDATA* dumpData,
+													   int sliceNum,
+													   unsigned short groupWord,
+													   unsigned short elementWord,
+													   unsigned int   pos = 0);
+
+std::string CircusCS_GetDcmTagElementOfDumpDataAsStringFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+																  int sliceNum,
+																  char* tagStr,
+																  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsSint16(CircusCS_DCMDUMPDATA* dumpData,
+											   int sliceNum,
+											   unsigned short groupWord,
+											   unsigned short elementWord,
+											   short* value,
+											   unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsSint16FromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr,
+														  short* value,
+														  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsUint16(CircusCS_DCMDUMPDATA* dumpData,
+											   int sliceNum,
+											   unsigned short groupWord,
+											   unsigned short elementWord,
+											   unsigned short* value,
+											   unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsUint16FromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr,
+														  unsigned short* value,
+														  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsSint32(CircusCS_DCMDUMPDATA* dumpData,
+											   int sliceNum,
+											   unsigned short groupWord,
+											   unsigned short elementWord,
+											   int* value,
+											   unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsSint32FromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr,
+														  int* value,
+														  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsUint32(CircusCS_DCMDUMPDATA* dumpData,
+											   int sliceNum,
+											   unsigned short groupWord,
+											   unsigned short elementWord,
+											   unsigned int* value,
+											   unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsUint32FromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr,
+														  unsigned int* value,
+														  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsFloat(CircusCS_DCMDUMPDATA* dumpData,
+											  int sliceNum,
+											  unsigned short groupWord,
+											  unsigned short elementWord,
+											  float* value,
+											  unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsFloatFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														 int sliceNum,
+														 char* tagStr,
+														 float* value,
+														 unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
+											   int sliceNum,
+											   unsigned short groupWord,
+											   unsigned short elementWord,
+											   double* value,
+											   unsigned int pos = 0);
+
+int CircusCS_GetDcmTagElementOfDumpDataAsDoubleFromTagStr(CircusCS_DCMDUMPDATA* dumpData,
+														  int sliceNum,
+														  char* tagStr,
+														  double* value,
+														  unsigned int pos = 0);
+
 int	 CircusCS_GetModalityOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* modality, int sliceNum=0);
 int	 CircusCS_GetPatientSexOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* sex, int sliceNum=0);
 int	 CircusCS_GetPatientAgeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* age, int sliceNum=0);
@@ -90,88 +257,6 @@ int	 CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData,
 
 std::vector<float> CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum=0);
 std::vector<float> CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum=0);
-
-
-
-unsigned char*
-CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dumpData,
-												       int sliceNum,
-												       unsigned short groupWord,
-												       unsigned short elementWord);
-
-std::vector<std::string> CircusCS_GetDcmPrivateTagElementOfDumpDataAsStringArray(CircusCS_DCMDUMPDATA* dumpData,
-																				 int sliceNum,
-																				 unsigned short groupWord,
-																				 unsigned short elementWord);
-
-std::vector<short> CircusCS_GetDcmPrivateTagElementOfDumpDataAsSint16Array(CircusCS_DCMDUMPDATA* dumpData,
-																		   int sliceNum,
-																		   unsigned short groupWord,
-																		   unsigned short elementWord);
-std::vector<unsigned short> CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint16Array(CircusCS_DCMDUMPDATA* dumpData,
-																					int sliceNum,
-																					unsigned short groupWord,
-																					unsigned short elementWord);
-std::vector<int> CircusCS_GetDcmPrivateTagElementOfDumpDataAsSint32Array(CircusCS_DCMDUMPDATA* dumpData,
-																		 int sliceNum,
-																		 unsigned short groupWord,
-																		 unsigned short elementWord);
-std::vector<unsigned int> CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint32Array(CircusCS_DCMDUMPDATA* dumpData,
-																				  int sliceNum,
-																				  unsigned short groupWord,
-																				  unsigned short elementWord);
-std::vector<float> CircusCS_GetDcmPrivateTagElementOfDumpDataAsFloatArray(CircusCS_DCMDUMPDATA* dumpData,
-																		  int sliceNum,
-																		  unsigned short groupWord,
-																		  unsigned short elementWord);
-std::vector<double> CircusCS_GetDcmPrivateTagElementOfDumpDataAsDoubleArray(CircusCS_DCMDUMPDATA* dumpData,
-																			int sliceNum,
-																			unsigned short groupWord,
-																			unsigned short elementWord);
-
-
-std::string CircusCS_GetDcmPrivateTagElementOfDumpDataAsString(CircusCS_DCMDUMPDATA* dumpData,
-															   int            sliceNum,
-															   unsigned short groupWord,
-															   unsigned short elementWord,
-															   unsigned int   pos = 0);
-
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsSint16(CircusCS_DCMDUMPDATA* dumpData,
-													   int sliceNum,
-													   unsigned short groupWord,
-													   unsigned short elementWord,
-													   short* value,
-													   unsigned int pos = 0);
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint16(CircusCS_DCMDUMPDATA* dumpData,
-													   int sliceNum,
-													   unsigned short groupWord,
-													   unsigned short elementWord,
-													   unsigned short* value,
-													   unsigned int pos = 0);
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsSint32(CircusCS_DCMDUMPDATA* dumpData,
-													   int sliceNum,
-													   unsigned short groupWord,
-													   unsigned short elementWord,
-													   int* value,
-													   unsigned int pos = 0);
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsUint32(CircusCS_DCMDUMPDATA* dumpData,
-													   int sliceNum,
-													   unsigned short groupWord,
-													   unsigned short elementWord,
-													   unsigned int* value,
-													   unsigned int pos = 0);
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsFloat(CircusCS_DCMDUMPDATA* dumpData,
-													  int            sliceNum,
-													  unsigned short groupWord,
-													  unsigned short elementWord,
-													  float*         value,
-													  unsigned int   pos = 0);
-int CircusCS_GetDcmPrivateTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
-													   int            sliceNum,
-													   unsigned short groupWord,
-													   unsigned short elementWord,
-													   double*        value,
-													   unsigned int   pos = 0);
 
 #endif
 

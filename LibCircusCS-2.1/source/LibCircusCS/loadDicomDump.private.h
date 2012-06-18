@@ -15,3 +15,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned char* base64Decode(const char* src);
+
+std::string getTagElementData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum, char* tagStr);
+
