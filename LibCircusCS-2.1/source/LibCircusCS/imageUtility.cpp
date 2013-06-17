@@ -182,7 +182,7 @@ CircusCS_SetWindowAndConvertToUint8Image(VARTYPE* img, int length, int windowLev
 	for(int i=1; i<length; i++)
 	{
 		if(img[i] <= min)      ret[i] = 0;
-		else if(img[i] <= min) ret[i] = 255;
+		else if(img[i] > max)  ret[i] = 255;
 		else
 		{
 			double tmp = 255.0 * (img[i] - min) / (max - min); 
