@@ -34,7 +34,7 @@ measurmentMain(char* jobRootPath, int coreNum)
 	CircusCS_BASICDCMTAGVALUES* basicTagValues = CircusCS_NewBasicDcmTagValues(inDumpFname);
 	if(basicTagValues == NULL)
 	{
-		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
+		sprintf(buffer, "Failed to load DICOM dump data: %s", inDumpFname);
 		CircusCS_AppendLogFile(logFname, buffer);
 		return -1;
 	}
@@ -52,7 +52,7 @@ measurmentMain(char* jobRootPath, int coreNum)
 
 	if(volume == NULL)
 	{
-		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
+		sprintf(buffer, "Failed to load volume data: %s", inVolumeFname);
 		CircusCS_AppendLogFile(logFname, buffer);
 		CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 		return -1;
@@ -66,7 +66,7 @@ measurmentMain(char* jobRootPath, int coreNum)
 
 	if(resultVolume == NULL)
 	{
-		sprintf(buffer, "Fail to allocate result volume");
+		sprintf(buffer, "Failed to allocate result volume");
 		CircusCS_AppendLogFile(logFname, buffer);
 		free(volume);
 		return -1;

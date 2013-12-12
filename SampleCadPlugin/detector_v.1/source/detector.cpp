@@ -36,7 +36,7 @@ detectorMain(char* jobRootPath, int coreNum)
 	CircusCS_BASICDCMTAGVALUES* basicTagValues = CircusCS_NewBasicDcmTagValues(inDumpFname);
 	if(basicTagValues == NULL)
 	{
-		sprintf(buffer, "Fail to load DICOM dump data: %s", inDumpFname);
+		sprintf(buffer, "Failed to load DICOM dump data: %s", inDumpFname);
 		CircusCS_AppendLogFile(logFname, buffer);
 		return -1;
 	}
@@ -54,7 +54,7 @@ detectorMain(char* jobRootPath, int coreNum)
 
 	if(volume == NULL)
 	{
-		sprintf(buffer, "Fail to load volume data: %s", inVolumeFname);
+		sprintf(buffer, "Failed to load volume data: %s", inVolumeFname);
 		CircusCS_AppendLogFile(logFname, buffer);
 		CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 		return -1;
@@ -97,7 +97,7 @@ detectorMain(char* jobRootPath, int coreNum)
 
 		if(fp == NULL)
 		{
-			sprintf(buffer, "Fail to write attiributes: %s", outFname);
+			sprintf(buffer, "Failed to write attiributes: %s", outFname);
 			CircusCS_AppendLogFile(logFname, buffer);
 			CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 			free(volume);
@@ -132,7 +132,7 @@ detectorMain(char* jobRootPath, int coreNum)
 	
 		if(fp == NULL)
 		{
-			sprintf(buffer, "Fail to write detector results: %s", outFname);
+			sprintf(buffer, "Failed to write detector results: %s", outFname);
 			CircusCS_AppendLogFile(logFname, buffer);
 			CircusCS_DeleteBasicDcmTagValues(basicTagValues);
 			free(volume);
