@@ -29,7 +29,7 @@ CircusCS_LoadRawVolumeFile(char* fileName, int length)
 
 	if(ret == NULL)
 	{
-		fprintf(stderr, "Fail to allocate output\n");
+		fprintf(stderr, "Failed to allocate output\n");
 		return NULL;
 	}
 
@@ -37,7 +37,7 @@ CircusCS_LoadRawVolumeFile(char* fileName, int length)
 	
 	if(fp == NULL)
 	{
-		fprintf(stderr, "Fail to open the file (%s)\n", fileName);
+		fprintf(stderr, "Failed to open the file (%s)\n", fileName);
 	}
 	else
 	{

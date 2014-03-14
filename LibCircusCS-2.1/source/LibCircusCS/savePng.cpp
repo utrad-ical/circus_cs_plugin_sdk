@@ -34,7 +34,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	FILE* fp = fopen(fileName, "wb");
 	if(!fp)
 	{
-		fprintf(stderr, "Fail to open file: %s\n", fileName);
+		fprintf(stderr, "Failed to open file: %s\n", fileName);
 		return -1;
 	}
 	//----------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	if(!pngStruct)
 	{
 		fclose(fp);
-		fprintf(stderr, "Fail to initialize png_struct.\n");
+		fprintf(stderr, "Failed to initialize png_struct.\n");
 		return -1;
 	}
 
@@ -55,7 +55,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	{
 		png_destroy_write_struct(&pngStruct, NULL);
 		fclose(fp);
-		fprintf(stderr, "Fail to initialize png_info.\n");
+		fprintf(stderr, "Failed to initialize png_info.\n");
 		return -1;
 	}
 

@@ -36,7 +36,7 @@ CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int heig
 	FILE* fp = fopen(fileName, "wb");
 	if(!fp)
 	{
-		fprintf(stderr, "Fail to open file: %s\n", fileName);
+		fprintf(stderr, "Failed to open file: %s\n", fileName);
 		return -1;
 	}
 	//----------------------------------------------------------------------------------------------
