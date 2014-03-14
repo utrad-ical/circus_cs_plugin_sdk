@@ -82,7 +82,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 		png_set_compression_level(pngStruct, compressLevel);
 	}
 
-	int pngColorType = PNG_COLOR_TYPE_RGB;
+	int pngColorType = (type == CircusCS_VALUETYPE_SINGLE) ? PNG_COLOR_TYPE_GRAY : PNG_COLOR_TYPE_RGB;
 
 	png_set_IHDR(pngStruct,
 				 pngInfo,
@@ -101,7 +101,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	png_bytepp pngBuff;
 	pngBuff = new png_byte*[height];
 
-	int chNum = 3;
+	int chNum = (type == CircusCS_VALUETYPE_SINGLE) ? 1 : 3;
 
 	for(int j=0; j<height; j++)
 	{
@@ -119,11 +119,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 			}
 			else  // PIXEL_TYPE_GLAYSCALE
 			{
-				unsigned char pixelVal = img[j * width + i];
-			
-				pngBuff[j][i * chNum + 0] = pixelVal;	// red
-				pngBuff[j][i * chNum + 1] = pixelVal;	// green
-				pngBuff[j][i * chNum + 2] = pixelVal;	// blue
+				pngBuff[j][i] = img[j * width + i];
 			}
 		}
 	}

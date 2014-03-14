@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>LibCircusCS-2.1</ProjectName>
+    <ProjectName>LibCircusCS-2.2</ProjectName>
     <ProjectGuid>{DA598824-92AE-4F49-A597-8495EF6E2DC3}</ProjectGuid>
     <RootNamespace>VOLxxx</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
