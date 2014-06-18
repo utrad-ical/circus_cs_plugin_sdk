@@ -1,5 +1,5 @@
-
+*.sdf
+*.vcxproj.user
+/ipch
 /VOL_libraries
-/MRA-CAD_v.1s
 /SamplePluginArchives
-/CalcFA_v.1s
