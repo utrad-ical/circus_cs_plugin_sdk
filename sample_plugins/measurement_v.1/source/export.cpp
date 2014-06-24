@@ -32,7 +32,7 @@ int
 	for(int k=0; k<matrixSize->depth; k++)
 	{
 		// Extreact single slice 
-		short*         orgImg    = CircusCS_ExtractSingleSliceFromVolumeData<short>(orgVolume,
+		short* orgImg = CircusCS_ExtractSingleSliceFromVolumeData<short>(orgVolume,
 			matrixSize,
 			k,
 			AXIAL_SECTION);
