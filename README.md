@@ -1,6 +1,6 @@
 # Plug-in software development kit (SDK) for CIRCUS CS
 
-The SDK is supported on Visual C++ 2010 or later.
+The SDK is supported on Microsoft Visual C++ 2010 or later.
 
 [Project Website](http://www.ut-radiology.umin.jp/ical/CIRCUS/index.html)
 
