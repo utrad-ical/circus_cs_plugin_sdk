@@ -28,36 +28,33 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int
-CircusCS_GetCoreNumber()
+int CircusCS_GetCoreNumber()
 {
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo(&sysinfo);
 	return sysinfo.dwNumberOfProcessors;
 }
 
-void
-CircusCS_DebugPrint(LPTSTR szFormat, ... )
+void CircusCS_DebugPrint(LPTSTR szFormat, ... )
 {
-     TCHAR   szBuffer[MAX_STRING_LENGTH + 1];
-     INT     nWritten;
-     va_list args;
+	TCHAR   szBuffer[MAX_STRING_LENGTH + 1];
+	INT     nWritten;
+	va_list args;
 
-     ::ZeroMemory(szBuffer, sizeof(szBuffer));
+	::ZeroMemory(szBuffer, sizeof(szBuffer));
 
-     // Format error message like printf()
-     va_start( args, szFormat );
-     nWritten = _vsntprintf( szBuffer, MAX_STRING_LENGTH, szFormat, args );
-     va_end( args );
+	// Format error message like printf()
+	va_start( args, szFormat );
+	nWritten = _vsntprintf( szBuffer, MAX_STRING_LENGTH, szFormat, args );
+	va_end( args );
 
-     // Output debug string
-     ::OutputDebugString( szBuffer );
+	// Output debug string
+	::OutputDebugString( szBuffer );
 
-	 return;
+	return;
 }
 
-int
-CircusCS_AppendLogFile(char* fileName, char* message)
+int CircusCS_AppendLogFile(char* fileName, char* message)
 {
 	char dateTimeStr[64];
 	GetDateTimeString(dateTimeStr);
@@ -75,24 +72,24 @@ CircusCS_AppendLogFile(char* fileName, char* message)
 
 
 
-void
-GetDateTimeString(char* dateTimeStr)
+void GetDateTimeString(char* dateTimeStr)
 {
 	// Get current date/time
 	time_t     current;
 	struct tm  *local;
-	
+
 	time(&current);					// Retrieve current date/time
 	local = localtime(&current);    // Retrieve local time
 
 	SYSTEMTIME	 now;
 	GetLocalTime(&now);
-	
-	sprintf(dateTimeStr, "%04d-%02d-%02d %02d:%02d:%02d", 1900 + local->tm_year,
-														  local->tm_mon + 1,
-														  local->tm_mday,
-														  local->tm_hour,
-														  local->tm_min,
-														  local->tm_sec);
+
+	sprintf(dateTimeStr, "%04d-%02d-%02d %02d:%02d:%02d",
+		1900 + local->tm_year,
+		local->tm_mon + 1,
+		local->tm_mday,
+		local->tm_hour,
+		local->tm_min,
+		local->tm_sec);
 	return;
 }

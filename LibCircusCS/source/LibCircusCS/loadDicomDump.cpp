@@ -23,8 +23,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CircusCS_DCMDUMPDATA*
-CircusCS_NewDcmDumpData()
+CircusCS_DCMDUMPDATA* CircusCS_NewDcmDumpData()
 {
 	CircusCS_DCMDUMPDATA* ret;
 
@@ -35,17 +34,14 @@ CircusCS_NewDcmDumpData()
 	return ret;
 }
 
-void
-CircusCS_DeleteDcmDumpData(CircusCS_DCMDUMPDATA* dumpData)
+void CircusCS_DeleteDcmDumpData(CircusCS_DCMDUMPDATA* dumpData)
 {
 	dumpData->data->~CSimpleIniTempl();
-	//delete dumpData->data;
 	free(dumpData);
 }
 
 
-CircusCS_DCMDUMPDATA*
-CircusCS_LoadDcmDumpFile(char* fileName)
+CircusCS_DCMDUMPDATA* CircusCS_LoadDcmDumpFile(char* fileName)
 {
 	CircusCS_DCMDUMPDATA* ret = CircusCS_NewDcmDumpData();
 
@@ -60,11 +56,10 @@ CircusCS_LoadDcmDumpFile(char* fileName)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::string>
-splitString(std::string str, std::string delim)
+std::vector<std::string> splitString(std::string str, std::string delim)
 {
 	std::vector<std::string> ret;
-	
+
 	for(unsigned int i=0, n; i <= str.length(); i=n+1 )
 	{
 		n = (unsigned int)str.find_first_of(delim, i);
@@ -93,18 +88,18 @@ int checkBase64Encoding(CircusCS_DCMDUMPDATA* dumpData, int sliceNum, char* tagS
 	{
 		return 1;
 	}
-	
+
 	return 0;
 }
 
-template<typename VARTYPE>
-std::vector<VARTYPE> getDcmTagElementOfDumpDataAsArray(CircusCS_DCMDUMPDATA* dumpData,
-											          int sliceNum,
-											          char* tagStr)
+template<typename VARTYPE> std::vector<VARTYPE> getDcmTagElementOfDumpDataAsArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	VARTYPE buf;
 	std::vector<VARTYPE> ret;
-	
+
 	std::vector<std::string> dstVec = splitString(getTagElementData(dumpData, sliceNum, tagStr), "\\");
 
 	int encodeFlg = checkBase64Encoding(dumpData, sliceNum, tagStr);
@@ -135,11 +130,11 @@ std::vector<VARTYPE> getDcmTagElementOfDumpDataAsArray(CircusCS_DCMDUMPDATA* dum
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::string
-CircusCS_GetDcmTagElementOfDumpData(CircusCS_DCMDUMPDATA* dumpData,
-									int sliceNum,
-									unsigned short groupWord,
-									unsigned short elementWord)
+std::string CircusCS_GetDcmTagElementOfDumpData(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -147,19 +142,19 @@ CircusCS_GetDcmTagElementOfDumpData(CircusCS_DCMDUMPDATA* dumpData,
 	return getTagElementData(dumpData, sliceNum, tagStr);
 }
 
-std::string
-CircusCS_GetDcmTagElementOfDumpData(CircusCS_DCMDUMPDATA* dumpData,
-									int sliceNum,
-									char* tagStr)
+std::string CircusCS_GetDcmTagElementOfDumpData(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	return getTagElementData(dumpData, sliceNum, tagStr);
 }
 
-unsigned char*
-CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dumpData,
-										        int sliceNum,
-										        unsigned short groupWord,
-										        unsigned short elementWord)
+unsigned char* CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -167,20 +162,19 @@ CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dumpData,
 	return  CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(dumpData, sliceNum, tagStr);
 }
 
-unsigned char*
-CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(CircusCS_DCMDUMPDATA* dumpData,
-												int sliceNum,
-												char* tagStr)
+unsigned char* CircusCS_GetDcmTagElementOfDumpDataAsUint8Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
-	//fprintf(stderr, "+++%s: %s\n", tagStr, (unsigned char*)getTagElementData(dumpData, sliceNum, tagStr).c_str());
 	return  (unsigned char*)(getTagElementData(dumpData, sliceNum, tagStr).c_str());
 }
 
-std::vector<std::string>
-CircusCS_GetDcmTagElementOfDumpDataAsStringArray(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 unsigned short groupWord,
-												 unsigned short elementWord)
+std::vector<std::string> CircusCS_GetDcmTagElementOfDumpDataAsStringArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -188,19 +182,19 @@ CircusCS_GetDcmTagElementOfDumpDataAsStringArray(CircusCS_DCMDUMPDATA* dumpData,
 	return  CircusCS_GetDcmTagElementOfDumpDataAsStringArray(dumpData, sliceNum, tagStr);
 }
 
-std::vector<std::string>
-CircusCS_GetDcmTagElementOfDumpDataAsStringArray(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<std::string> CircusCS_GetDcmTagElementOfDumpDataAsStringArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	return splitString(getTagElementData(dumpData, sliceNum, tagStr), "\\");
 }
 
-std::vector<short>
-CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(CircusCS_DCMDUMPDATA* dumpData,
-										         int sliceNum,
-										         unsigned short groupWord,
-										         unsigned short elementWord)
+std::vector<short> CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -208,21 +202,21 @@ CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(CircusCS_DCMDUMPDATA* dumpData,
 	return  CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(dumpData, sliceNum, tagStr);
 }
 
-std::vector<short>
-CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<short> CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<short> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<short>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::vector<unsigned short>
-CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(CircusCS_DCMDUMPDATA* dumpData,
-										         int sliceNum,
-										         unsigned short groupWord,
-										         unsigned short elementWord)
+std::vector<unsigned short> CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -230,21 +224,21 @@ CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(dumpData, sliceNum, tagStr);
 }
 
-std::vector<unsigned short>
-CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<unsigned short> CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<unsigned short> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<unsigned short>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::vector<int>
-CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(CircusCS_DCMDUMPDATA* dumpData,
-										         int sliceNum,
-										         unsigned short groupWord,
-										         unsigned short elementWord)
+std::vector<int> CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -252,21 +246,21 @@ CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(CircusCS_DCMDUMPDATA* dumpData,
 	return  CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(dumpData, sliceNum, tagStr);
 }
 
-std::vector<int>
-CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<int> CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<int> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<int>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::vector<unsigned int>
-CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(CircusCS_DCMDUMPDATA* dumpData,
-										         int sliceNum,
-										         unsigned short groupWord,
-										         unsigned short elementWord)
+std::vector<unsigned int> CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -274,21 +268,21 @@ CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(dumpData, sliceNum, tagStr);
 }
 
-std::vector<unsigned int>
-CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<unsigned int> CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<unsigned int> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<unsigned int>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::vector<float>
-CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(CircusCS_DCMDUMPDATA* dumpData,
-												int sliceNum,
-												unsigned short groupWord,
-												unsigned short elementWord)
+std::vector<float> CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -296,21 +290,21 @@ CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(dumpData, sliceNum, tagStr);
 }
 
-std::vector<float>
-CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(CircusCS_DCMDUMPDATA* dumpData,
-												int sliceNum,
-												char* tagStr)
+std::vector<float> CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<float> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<float>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::vector<double>
-CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 unsigned short groupWord,
-												 unsigned short elementWord)
+std::vector<double> CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -318,22 +312,22 @@ CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(dumpData, sliceNum, tagStr);
 }
 
-std::vector<double>
-CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(CircusCS_DCMDUMPDATA* dumpData,
-												 int sliceNum,
-												 char* tagStr)
+std::vector<double> CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr)
 {
 	std::vector<double> ret;
 	ret = getDcmTagElementOfDumpDataAsArray<double>(dumpData, sliceNum, tagStr);
 	return ret;
 }
 
-std::string
-CircusCS_GetDcmTagElementOfDumpDataAsString(CircusCS_DCMDUMPDATA* dumpData,
-										   int sliceNum,
-										   unsigned short groupWord,
-										   unsigned short elementWord,
-										   unsigned int pos)
+std::string CircusCS_GetDcmTagElementOfDumpDataAsString(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -341,30 +335,30 @@ CircusCS_GetDcmTagElementOfDumpDataAsString(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsString(dumpData, sliceNum, tagStr, pos);
 }
 
-std::string
-CircusCS_GetDcmTagElementOfDumpDataAsString(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											unsigned int pos)
+std::string CircusCS_GetDcmTagElementOfDumpDataAsString(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	unsigned int pos)
 {
 	std::string ret;
 	std::vector<std::string> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsStringArray(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return NULL;
-	
+
 	return buf[pos];
 
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsSint16(CircusCS_DCMDUMPDATA* dumpData,
-										    int sliceNum,
-										    unsigned short groupWord,
-										    unsigned short elementWord,
-										    short* value,
-										    unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsSint16(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	short* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -373,65 +367,64 @@ CircusCS_GetDcmTagElementOfDumpDataAsSint16(CircusCS_DCMDUMPDATA* dumpData,
 
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsSint16(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											short* value,
-											unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsSint16(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	short* value,
+	unsigned int pos)
 {
 	std::vector<short> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsSint16Array(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
 }
 
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsUint16(CircusCS_DCMDUMPDATA* dumpData,
-										    int sliceNum,
-										    unsigned short groupWord,
-										    unsigned short elementWord,
-										    unsigned short* value,
-										    unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsUint16(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	unsigned short* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
 
 	return CircusCS_GetDcmTagElementOfDumpDataAsUint16(dumpData, sliceNum, tagStr, value, pos);
-
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsUint16(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											unsigned short* value,
-											unsigned int pos)
+int	CircusCS_GetDcmTagElementOfDumpDataAsUint16(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	unsigned short* value,
+	unsigned int pos)
 {
 	std::vector<unsigned short> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsUint16Array(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsSint32(CircusCS_DCMDUMPDATA* dumpData,
-										    int sliceNum,
-										    unsigned short groupWord,
-										    unsigned short elementWord,
-										    int* value,
-										    unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsSint32(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	int* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -439,32 +432,32 @@ CircusCS_GetDcmTagElementOfDumpDataAsSint32(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsSint32(dumpData, sliceNum, tagStr, value, pos);
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsSint32(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											int* value,
-											unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsSint32(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	int* value,
+	unsigned int pos)
 {
 	std::vector<int> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsSint32Array(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
 }
 
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsUint32(CircusCS_DCMDUMPDATA* dumpData,
-										    int sliceNum,
-										    unsigned short groupWord,
-										    unsigned short elementWord,
-										    unsigned int* value,
-										    unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsUint32(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	unsigned int* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -472,32 +465,32 @@ CircusCS_GetDcmTagElementOfDumpDataAsUint32(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsUint32(dumpData, sliceNum, tagStr, value, pos);
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsUint32(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											unsigned int* value,
-											unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsUint32(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	unsigned int* value,
+	unsigned int pos)
 {
 	std::vector<unsigned int> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsUint32Array(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
 }
 
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsFloat(CircusCS_DCMDUMPDATA* dumpData,
-										   int sliceNum,
-										   unsigned short groupWord,
-										   unsigned short elementWord,
-										   float* value,
-										   unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsFloat(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	float* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -505,32 +498,32 @@ CircusCS_GetDcmTagElementOfDumpDataAsFloat(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsFloat(dumpData, sliceNum, tagStr, value, pos);
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsFloat(CircusCS_DCMDUMPDATA* dumpData,
-										   int sliceNum,
-										   char* tagStr,
-										   float* value,
-										   unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsFloat(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	float* value,
+	unsigned int pos)
 {
 	std::vector<float> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsFloatArray(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
 }
 
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
-										    int sliceNum,
-										    unsigned short groupWord,
-										    unsigned short elementWord,
-										    double* value,
-										    unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsDouble(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	unsigned short groupWord,
+	unsigned short elementWord,
+	double* value,
+	unsigned int pos)
 {
 	char tagStr[128];
 	sprintf(tagStr, "%04x,%04x", groupWord, elementWord);
@@ -538,19 +531,19 @@ CircusCS_GetDcmTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
 	return CircusCS_GetDcmTagElementOfDumpDataAsDouble(dumpData, sliceNum, tagStr, value, pos);
 }
 
-int
-CircusCS_GetDcmTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
-											int sliceNum,
-											char* tagStr,
-											double* value,
-											unsigned int pos)
+int CircusCS_GetDcmTagElementOfDumpDataAsDouble(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum,
+	char* tagStr,
+	double* value,
+	unsigned int pos)
 {
 	std::vector<double> buf;
-	
+
 	buf = CircusCS_GetDcmTagElementOfDumpDataAsDoubleArray(dumpData, sliceNum, tagStr);
 
 	if(buf.size() == 0 || buf.size() <= pos)	 return -1;
-	
+
 	*value = buf[pos];
 
 	return 0;
@@ -559,8 +552,7 @@ CircusCS_GetDcmTagElementOfDumpDataAsDouble(CircusCS_DCMDUMPDATA* dumpData,
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CircusCS_BASICDCMTAGVALUES* 
-CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
+CircusCS_BASICDCMTAGVALUES* CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 {
 	std::string                 buf;
 	CircusCS_BASICDCMTAGVALUES* ret;
@@ -627,7 +619,7 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 
 		dumpData->data->GetAllSections(sections);
 		ret->matrixSize->depth = (int)sections.size();
-	
+
 		for(pp = sections.begin(); pp != sections.end(); pp++)
 		{
 			if(strcmp(pp->pItem, "common") == 0)
@@ -646,7 +638,7 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 
 	// Slice thickness
 	CircusCS_GetSliceThicknessOfDumpData(dumpData, &ret->sliceThickness_mm, sliceNum);
-	
+
 	// Rescale slope
 	CircusCS_GetRescaleSlopeOfDumpData(dumpData, &ret->rescaleSlope, sliceNum);
 
@@ -673,8 +665,7 @@ CircusCS_NewBasicDcmTagValues(char* fileName, int sliceNum)
 }
 
 
-void
-CircusCS_DeleteBasicDcmTagValues(CircusCS_BASICDCMTAGVALUES* values)
+void CircusCS_DeleteBasicDcmTagValues(CircusCS_BASICDCMTAGVALUES* values)
 {
 	CircusCS_DeleteSize3D(values->voxelSize_mm);
 	CircusCS_DeleteIntSize3D(values->matrixSize);
@@ -683,8 +674,7 @@ CircusCS_DeleteBasicDcmTagValues(CircusCS_BASICDCMTAGVALUES* values)
 }
 
 
-int
-CircusCS_GetModalityOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* modality, int sliceNum)
+int CircusCS_GetModalityOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* modality, int sliceNum)
 {
 	std::string buffer;
 
@@ -697,8 +687,7 @@ CircusCS_GetModalityOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* modality, i
 }
 
 
-int
-CircusCS_GetPatientSexOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* sex, int sliceNum)
+int CircusCS_GetPatientSexOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* sex, int sliceNum)
 {
 	std::string buffer;
 
@@ -710,8 +699,7 @@ CircusCS_GetPatientSexOfDumpData(CircusCS_DCMDUMPDATA* dumpData, char* sex, int 
 	return 0;
 }
 
-int
-CircusCS_GetPatientAgeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* age, int sliceNum)
+int CircusCS_GetPatientAgeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* age, int sliceNum)
 {
 	*age = 0;
 	std::string buffer;
@@ -719,7 +707,7 @@ CircusCS_GetPatientAgeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* age, int s
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_PatientAge);
 
 	if(buffer.compare("") == 0)	 return -1;
-	
+
 	if(buffer.find("Y", 0) != std::string::npos)
 	{
 		buffer.erase(3,1);
@@ -730,22 +718,20 @@ CircusCS_GetPatientAgeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* age, int s
 }
 
 
-int
-CircusCS_GetPatientSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* size, int sliceNum)
+int CircusCS_GetPatientSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* size, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_PatientSize);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*size = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
-int
-CircusCS_GetPatientWeightOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* weight, int sliceNum)
+int CircusCS_GetPatientWeightOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* weight, int sliceNum)
 {
 	std::string buffer;
 
@@ -754,46 +740,43 @@ CircusCS_GetPatientWeightOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* weigh
 	if(buffer.compare("") == 0)	return -1;
 
 	*weight = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetImageNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* imageNum, int sliceNum)
+int CircusCS_GetImageNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* imageNum, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_InstanceNumber);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*imageNum = atoi(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetAcquisitionNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* acquisitionNum, int sliceNum)
+int CircusCS_GetAcquisitionNumberOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int* acquisitionNum, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_AcquisitionNumber);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*acquisitionNum = atoi(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_INTSIZE2D* matrixSize, int sliceNum)
+int CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_INTSIZE2D* matrixSize, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_Columns);
 
 	if(buffer.compare("") == 0)	return -1;
@@ -809,68 +792,63 @@ CircusCS_GetMatrixSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_INTSIZ
 	return 0;
 }
 
-int
-CircusCS_GetFieldOfViewOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* fov, int sliceNum)
+int CircusCS_GetFieldOfViewOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* fov, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_ReconstructionDiameter);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*fov = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetSliceThicknessOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* thickness, int sliceNum)
+int CircusCS_GetSliceThicknessOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* thickness, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_SliceThickness);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*thickness = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetDistanceBetweenSlicesOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* dbs, int sliceNum)
+int CircusCS_GetDistanceBetweenSlicesOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* dbs, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_SpacingBetweenSlices);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*dbs = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetSliceLocationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* sliceLoc, int sliceNum)
+int CircusCS_GetSliceLocationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, float* sliceLoc, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_SliceLocation);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*sliceLoc = (float)atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE2D* pixelSpacing, int sliceNum)
+int CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE2D* pixelSpacing, int sliceNum)
 {
 	char *tp;
 	char buffer[MAX_STRING_LENGTH];
@@ -878,18 +856,17 @@ CircusCS_GetPixelSpacingOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE
 	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_PixelSpacing).c_str());
 
 	if(strcmp(buffer, "") == 0)  return -1;
-		
+
 	tp =  strtok(buffer, "\\");
 	pixelSpacing->width = (float)atof(tp);
 
 	tp =  strtok(NULL, "\\");
 	pixelSpacing->height = (float)atof(tp);
-	
+
 	return 0;
 }
 
-int
-CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit, int sliceNum)
+int CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit, int sliceNum)
 {
 	char buffer[MAX_STRING_LENGTH];
 
@@ -923,8 +900,7 @@ CircusCS_GetPixelUnitOfDicomData(CircusCS_DCMDUMPDATA* dumpData, int* pixelUnit,
 }
 
 
-int
-CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D* voxelSize_mm, int sliceNum)
+int CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D* voxelSize_mm, int sliceNum)
 {
 	CircusCS_SIZE2D pixelSpacing_mm;
 	char       modality[64];
@@ -943,7 +919,7 @@ CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D*
 			|| voxelSize_mm->depth <= 0.0f || voxelSize_mm->depth > 10.0f )
 		{
 			fprintf(stderr,"Warning: Distance between Slices is not found or invalid (%f) in DICOM (IMAGE_POSITION used)\n",
-				    voxelSize_mm->depth);
+				voxelSize_mm->depth);
 
 			std::vector<float> imagePosition0 = CircusCS_GetImagePositionOfDumpData(dumpData, sliceNum);
 			std::vector<float> imagePosition1 = CircusCS_GetImagePositionOfDumpData(dumpData, sliceNum+1);
@@ -959,17 +935,17 @@ CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D*
 			imagePosition0[2] -= imagePosition1[2];
 
 			voxelSize_mm->depth = (float)sqrt(imagePosition0[0] * imagePosition0[0]
-											  + imagePosition0[1] * imagePosition0[1]
-											  + imagePosition0[2] * imagePosition0[2]);
+			+ imagePosition0[1] * imagePosition0[1]
+			+ imagePosition0[2] * imagePosition0[2]);
 		}
 	}
 	else
 	{
 		float sliceLocation0, sliceLocation1;	
-		
+
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation0, sliceNum)==-1)   return -1;
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation1, sliceNum+1)==-1) return -1;
-		
+
 		voxelSize_mm->depth = abs(sliceLocation1 - sliceLocation0);
 	}
 
@@ -977,12 +953,11 @@ CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZE3D*
 }
 
 
-int
-CircusCS_GetRescaleInterceptOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* intercept, int sliceNum)
+int CircusCS_GetRescaleInterceptOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* intercept, int sliceNum)
 {
 	std::string buffer;
 	*intercept = 0.0;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_RescaleIntercept);
 
 	if(buffer.compare("") == 0) return -1;
@@ -992,37 +967,35 @@ CircusCS_GetRescaleInterceptOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* i
 	return 0;
 }
 
-int
-CircusCS_GetRescaleSlopeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* slope, int sliceNum)
+int CircusCS_GetRescaleSlopeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* slope, int sliceNum)
 {
 	std::string buffer;
 	*slope = 1.0;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_RescaleSlope);
 
 	if(buffer.compare("") == 0)	return -1;
 
 	*slope = atof(buffer.c_str());
-	
+
 	return 0;
 }
 
 
-int
-CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* totalDose, int sliceNum)
+int CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData, double* totalDose, int sliceNum)
 {
 	std::string buffer;
-	
+
 	buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_RadionuclideTotalDose);
 
 	if(buffer.compare("") == 0)
 	{
 		char tagStr[128];
 		sprintf(tagStr, "%s->%s", TAGSTR_RadiopharmaceuticalInformationSequence,
-								  TAGSTR_RadionuclideTotalDose);
+			TAGSTR_RadionuclideTotalDose);
 
 		buffer = CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, tagStr);
-		
+
 		if(buffer.compare("") == 0)  return -1;
 	}
 
@@ -1031,8 +1004,9 @@ CircusCS_GetRadionuclideTotalDoseOfDumpData(CircusCS_DCMDUMPDATA* dumpData, doub
 }
 
 
-std::vector<float>
-CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum)
+std::vector<float> CircusCS_GetImageOrientationOfDumpData(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum)
 {
 	char *tp;
 	char buffer[MAX_STRING_LENGTH];
@@ -1050,12 +1024,13 @@ CircusCS_GetImageOrientationOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int slice
 		tp = strtok(NULL, "\\");
 		ret.push_back((float)atof(tp));
 	}
-		
+
 	return ret;
 }
 
-std::vector<float>
-CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum)
+std::vector<float> CircusCS_GetImagePositionOfDumpData(
+	CircusCS_DCMDUMPDATA* dumpData,
+	int sliceNum)
 {
 	char *tp;
 	char buffer[MAX_STRING_LENGTH];
@@ -1064,22 +1039,20 @@ CircusCS_GetImagePositionOfDumpData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum
 	strcpy(buffer, CircusCS_GetDcmTagElementOfDumpData(dumpData, sliceNum, TAGSTR_ImagePositionPatient).c_str());
 
 	if(strcmp(buffer, "") == 0)  return ret;
-		
+
 	tp =  strtok(buffer, "\\");
 	ret.push_back((float)atof(tp));
 
 	tp =  strtok(NULL, "\\");
 	ret.push_back((float)atof(tp));
-	
+
 	tp =  strtok(NULL, "\\");
 	ret.push_back((float)atof(tp));	
-		
+
 	return ret;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 std::string getTagElementData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum, char* tagStr)
 {
@@ -1098,9 +1071,9 @@ std::string getTagElementData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum, char
 	{
 		ret = (char*)base64Decode(ret.substr(8).c_str());
 	}
-	
+
 	//fprintf(stderr, "---%s %s\n", tagStr, ret.c_str());
-		
+
 	return ret;
 }
 
@@ -1108,14 +1081,13 @@ std::string getTagElementData(CircusCS_DCMDUMPDATA* dumpData, int sliceNum, char
 // Base64 translation table as described in RFC 2045 (MIME)
 static const char BASE64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-unsigned char*
-base64Decode(const char* src)
+unsigned char* base64Decode(const char* src)
 {
 	unsigned char* ret = NULL;
 	unsigned char  ind1, ind2, ind3, ind4;
-	
+
 	int size = sizeof(src[0])*(int)strlen(src);    
-	
+
 	ret = (unsigned char*)calloc(sizeof(unsigned char), size + 3);
 
 	for(int i=0, j=0; i< size ; i += 4 , j += 3)
@@ -1124,7 +1096,7 @@ base64Decode(const char* src)
 		ind2 = *(src + i + 1) == '=' ? 0 : (unsigned char)(strchr(BASE64, *(src + i + 1)) - BASE64);
 		ind3 = *(src + i + 2) == '=' ? 0 : (unsigned char)(strchr(BASE64, *(src + i + 2)) - BASE64);
 		ind4 = *(src + i + 3) == '=' ? 0 : (unsigned char)(strchr(BASE64, *(src + i + 3)) - BASE64);
-		
+
 		// decode
 		*(ret + j + 0) = (unsigned char)( (ind1 & 0x3f) << 2 | (ind2 & 0x30) >> 4 );
 		*(ret + j + 1) = (unsigned char)( (ind2 & 0x0f) << 4 | (ind3 & 0x3c) >> 2 );

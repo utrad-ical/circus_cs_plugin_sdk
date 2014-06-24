@@ -11,7 +11,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int 
-visualizationMain(char* jobRootPath, int coreNum)
+	visualizationMain(char* jobRootPath, int coreNum)
 {
 	char inHeaderFileName[1024], logFileName[1024];
 	char axialFileName[1024], coroFileName[1024], sagiFileName[1024];
@@ -24,15 +24,15 @@ visualizationMain(char* jobRootPath, int coreNum)
 	// Load volume data from metaheader file 
 	//------------------------------------------------------------------------------------------------------------------
 	CircusCS_AppendLogFile(logFileName, "Load volume data from metaheader file");
-	
+
 	int                voxelUnit;
 	CircusCS_INTSIZE3D matrixSize;
 	CircusCS_SIZE3D    voxelSize;
 
 	short* volume = (short*)CircusCS_LoadVolumeDataFromMetaHeader(inHeaderFileName,
-																	&voxelUnit,
-																	&matrixSize,
-																	&voxelSize);
+		&voxelUnit,
+		&matrixSize,
+		&voxelSize);
 
 	if(volume == NULL)
 	{
@@ -41,7 +41,7 @@ visualizationMain(char* jobRootPath, int coreNum)
 		return -1;
 	}
 	//------------------------------------------------------------------------------------------------------------------
-	
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Create MIP image
 	//------------------------------------------------------------------------------------------------------------------
@@ -49,17 +49,17 @@ visualizationMain(char* jobRootPath, int coreNum)
 
 	// Create MIP image
 	short* axialMip = CircusCS_CreateIntensityProjection<short>(volume,
-																&matrixSize,
-																MAX_INTENSITY,
-																AXIAL_SECTION);
+		&matrixSize,
+		MAX_INTENSITY,
+		AXIAL_SECTION);
 	short* coroMip  = CircusCS_CreateIntensityProjection<short>(volume,
-		                                                        &matrixSize,
-																MAX_INTENSITY,
-																CORONAL_SECTION);
+		&matrixSize,
+		MAX_INTENSITY,
+		CORONAL_SECTION);
 	short* sagiMip  = CircusCS_CreateIntensityProjection<short>(volume,
-		                                                        &matrixSize,
-																MAX_INTENSITY,
-																SAGITTAL_SECTION);
+		&matrixSize,
+		MAX_INTENSITY,
+		SAGITTAL_SECTION);
 
 	// Set window level and window width (convert to Uint8) 
 	int length = matrixSize.width * matrixSize.height;
@@ -84,17 +84,17 @@ visualizationMain(char* jobRootPath, int coreNum)
 	sprintf(sagiFileName,  "%s\\MIP_sagittal.jpg", jobRootPath);
 
 	CircusCS_SaveImageAsJpeg(axialFileName,
-							 axialImg,
-							 matrixSize.width,
-							 matrixSize.height);
+		axialImg,
+		matrixSize.width,
+		matrixSize.height);
 	CircusCS_SaveImageAsJpeg(coroFileName,
-							 coroImg,
-							 matrixSize.width,
-							 matrixSize.depth);
+		coroImg,
+		matrixSize.width,
+		matrixSize.depth);
 	CircusCS_SaveImageAsJpeg(sagiFileName,
-							 sagiImg,
-							 matrixSize.height,
-							 matrixSize.depth);
+		sagiImg,
+		matrixSize.height,
+		matrixSize.depth);
 
 	free(axialImg);
 	free(coroImg);
@@ -109,7 +109,7 @@ visualizationMain(char* jobRootPath, int coreNum)
 	{
 		char fileName[1024];
 		sprintf(fileName, "%s\\%s", jobRootPath, RESULT_FILE_NAME);
-	
+
 		FILE* fp = fopen(fileName, "w");
 		fprintf(fp, "1\n");
 

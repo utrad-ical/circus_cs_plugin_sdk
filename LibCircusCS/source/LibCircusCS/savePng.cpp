@@ -25,8 +25,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int
-CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int height, int type, int compressLevel)
+int CircusCS_SaveImageAsPng(
+	char* fileName,
+	unsigned char* img,
+	int width,
+	int height,
+	int type,
+	int compressLevel)
 {
 	//----------------------------------------------------------------------------------------------
 	// Open file
@@ -85,14 +90,14 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	int pngColorType = (type == CircusCS_VALUETYPE_SINGLE) ? PNG_COLOR_TYPE_GRAY : PNG_COLOR_TYPE_RGB;
 
 	png_set_IHDR(pngStruct,
-				 pngInfo,
-				 width,
-				 height,
-				 8,
-				 pngColorType,
-				 PNG_INTERLACE_NONE,
-				 PNG_COMPRESSION_TYPE_DEFAULT,
-				 PNG_FILTER_TYPE_DEFAULT);
+		pngInfo,
+		width,
+		height,
+		8,
+		pngColorType,
+		PNG_INTERLACE_NONE,
+		PNG_COMPRESSION_TYPE_DEFAULT,
+		PNG_FILTER_TYPE_DEFAULT);
 	//----------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
@@ -129,7 +134,7 @@ CircusCS_SaveImageAsPng(char* fileName, unsigned char* img, int width, int heigh
 	// write png_info and pixel data
 	//----------------------------------------------------------------------------------------------
 	png_write_info(pngStruct, pngInfo);
-    png_write_image(pngStruct, pngBuff);
+	png_write_image(pngStruct, pngBuff);
 	png_write_end(pngStruct, NULL );
 	png_destroy_write_struct(&pngStruct, &pngInfo);
 	fclose(fp);

@@ -17,10 +17,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-exportImageFilesFromVolumeData(char* jobRootPath,
-							   short* orgVolume,
-							   unsigned char* resultVolume,
-							   CircusCS_INTSIZE3D* matrixSize)
+	exportImageFilesFromVolumeData(char* jobRootPath,
+	short* orgVolume,
+	unsigned char* resultVolume,
+	CircusCS_INTSIZE3D* matrixSize)
 {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -33,22 +33,21 @@ exportImageFilesFromVolumeData(char* jobRootPath,
 	{
 		// Extreact single slice 
 		short*         orgImg    = CircusCS_ExtractSingleSliceFromVolumeData<short>(orgVolume,
-			                                                                        matrixSize,
-																					k,
-																					AXIAL_SECTION);
-	
+			matrixSize,
+			k,
+			AXIAL_SECTION);
+
 		unsigned char* resultImg = CircusCS_ExtractSingleSliceFromVolumeData<unsigned char>(resultVolume,
-			                                                                                matrixSize,
-																							k,
-																							AXIAL_SECTION,
-																							CircusCS_VALUETYPE_RGB);
+			matrixSize,
+			k,
+			AXIAL_SECTION,
+			CircusCS_VALUETYPE_RGB);
 
 		// Set window level and window width (original data) 
 		unsigned char* orgImgUint8 = CircusCS_SetWindowAndConvertToUint8Image<short>(orgImg,
-																					 length,
-																					 WINDOW_LEVEL,
-																					 WINDOW_WIDTH);
-
+			length,
+			WINDOW_LEVEL,
+			WINDOW_WIDTH);
 
 		// Export original image
 		sprintf(orgFileName, "%s\\org%04d.png", jobRootPath, k+1);

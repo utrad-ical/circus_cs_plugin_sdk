@@ -4,7 +4,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-int measurmentMain(char* jobRootPath, int coreNum);
+	int measurmentMain(char* jobRootPath, int coreNum);
 
 #ifdef __cplusplus
 }

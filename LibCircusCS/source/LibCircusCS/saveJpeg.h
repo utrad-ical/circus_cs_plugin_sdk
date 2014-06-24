@@ -20,12 +20,13 @@
 #define JPEG_QUALITY_MIN	0
 #define JPEG_QUALITY_MAX	100
 
-int CircusCS_SaveImageAsJpeg(char* fileName,
-							unsigned char* img,
-							int width,
-							int height,
-							int type=CircusCS_VALUETYPE_SINGLE,
-							int quality=JPEG_QUALITY_MAX);
+int CircusCS_SaveImageAsJpeg(
+	char* fileName,
+	unsigned char* img,
+	int width,
+	int height,
+	int type=CircusCS_VALUETYPE_SINGLE,
+	int quality=JPEG_QUALITY_MAX);
 
 #endif
 

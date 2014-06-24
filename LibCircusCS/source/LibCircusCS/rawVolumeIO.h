@@ -19,10 +19,11 @@
 
 template <typename VARTYPE> VARTYPE* CircusCS_LoadRawVolumeFile(char* fileName, int length);
 
-void* CircusCS_LoadVolumeDataFromMetaHeader(char* headerFileName,
-											int* voxelUnit,
-											CircusCS_INTSIZE3D* matrixSize,
-											CircusCS_SIZE3D* voxelSize);
+void* CircusCS_LoadVolumeDataFromMetaHeader(
+	char* headerFileName,
+	int* voxelUnit,
+	CircusCS_INTSIZE3D* matrixSize,
+	CircusCS_SIZE3D* voxelSize);
 
 #endif
 

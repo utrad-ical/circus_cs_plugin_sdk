@@ -21,12 +21,13 @@
 #define COMPRESSION_LEVEL_MIN	1	// Z_BEST_SPEED
 #define COMPRESSION_LEVEL_MAX	9	// Z_BEST_COMPRESSION
 
-int CircusCS_SaveImageAsPng(char* fileName,
-							unsigned char* img,
-							int width,
-							int height,
-							int type=CircusCS_VALUETYPE_SINGLE,
-							int compressLevel=COMPRESSION_LEVEL_MAX);
+int CircusCS_SaveImageAsPng(
+	char* fileName,
+	unsigned char* img,
+	int width,
+	int height,
+	int type=CircusCS_VALUETYPE_SINGLE,
+	int compressLevel=COMPRESSION_LEVEL_MAX);
 
 #endif
 

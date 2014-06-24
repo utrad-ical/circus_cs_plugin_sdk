@@ -24,8 +24,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-CircusCS_SIZE2D*
-CircusCS_NewSize2D(float width, float height)
+CircusCS_SIZE2D* CircusCS_NewSize2D(float width, float height)
 {
 	CircusCS_SIZE2D* ret = (CircusCS_SIZE2D*)malloc(sizeof(CircusCS_SIZE2D));
 
@@ -36,8 +35,7 @@ CircusCS_NewSize2D(float width, float height)
 void CircusCS_DeleteSize2D(CircusCS_SIZE2D* size) { free(size); }
 
 
-CircusCS_INTSIZE2D*
-CircusCS_NewIntSize2D(int width, int height)
+CircusCS_INTSIZE2D* CircusCS_NewIntSize2D(int width, int height)
 {
 	CircusCS_INTSIZE2D* ret = (CircusCS_INTSIZE2D*)malloc(sizeof(CircusCS_INTSIZE2D));
 
@@ -48,8 +46,7 @@ CircusCS_NewIntSize2D(int width, int height)
 void CircusCS_DeleteIntSize2D(CircusCS_INTSIZE2D* size) { free(size); }
 
 
-CircusCS_SIZE3D*
-CircusCS_NewSize3D(float width, float height, float depth)
+CircusCS_SIZE3D* CircusCS_NewSize3D(float width, float height, float depth)
 {
 	CircusCS_SIZE3D* ret = (CircusCS_SIZE3D*)malloc(sizeof(CircusCS_SIZE3D));
 
@@ -60,8 +57,7 @@ CircusCS_NewSize3D(float width, float height, float depth)
 void CircusCS_DeleteSize3D(CircusCS_SIZE3D* size) { free(size); }
 
 
-CircusCS_INTSIZE3D*
-CircusCS_NewIntSize3D(int width, int height, int depth)
+CircusCS_INTSIZE3D* CircusCS_NewIntSize3D(int width, int height, int depth)
 {
 	CircusCS_INTSIZE3D* ret = (CircusCS_INTSIZE3D*)malloc(sizeof(CircusCS_INTSIZE3D));
 

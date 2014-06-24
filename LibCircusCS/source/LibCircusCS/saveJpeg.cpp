@@ -25,8 +25,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int
-CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int height, int type, int quality)
+int CircusCS_SaveImageAsJpeg(
+	char* fileName,
+	unsigned char* img,
+	int width,
+	int height,
+	int type,
+	int quality)
 {
 	if(quality < JPEG_QUALITY_MIN || quality > JPEG_QUALITY_MAX)  quality = JPEG_QUALITY_MAX;
 
@@ -91,7 +96,7 @@ CircusCS_SaveImageAsJpeg(char* fileName, unsigned char* img, int width, int heig
 	}
 
 	jpeg_finish_compress( &jpegStruct );
-	
+
 	fclose(fp);
 
 	delete [] buffer;

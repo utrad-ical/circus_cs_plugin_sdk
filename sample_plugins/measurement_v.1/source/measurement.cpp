@@ -15,7 +15,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-measurmentMain(char* jobRootPath, int coreNum)
+	measurmentMain(char* jobRootPath, int coreNum)
 {
 	char inVolumeFileName[1024], inDumpFileName[1024], logFileName[1024];
 	char resFileName[1024];
@@ -46,8 +46,8 @@ measurmentMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFileName, "Load volume data");
 
 	int length = basicTagValues->matrixSize->width
-			   * basicTagValues->matrixSize->height
-			   * basicTagValues->matrixSize->depth;
+		* basicTagValues->matrixSize->height
+		* basicTagValues->matrixSize->depth;
 	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFileName, length);
 
 	if(volume == NULL)
@@ -85,21 +85,25 @@ measurmentMain(char* jobRootPath, int coreNum)
 	short threshold = 100;
 
 	for(int k=0; k<basicTagValues->matrixSize->depth;  k++)
-	for(int j=0; j<basicTagValues->matrixSize->height; j++)
-	for(int i=0; i<basicTagValues->matrixSize->width;  i++)
 	{
-		int pos = k * basicTagValues->matrixSize->height * basicTagValues->matrixSize->width
-			    + j * basicTagValues->matrixSize->width + i;
-
-		if(volume[pos] < min) min  = volume[pos];
-		if(volume[pos] > max) max  = volume[pos];
-		mean += volume[pos];
-
-		resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = resultVolume[pos * 3 + 2] = 0;
-
-		if(volume[pos] >= THRESHOLD)
+		for(int j=0; j<basicTagValues->matrixSize->height; j++)
 		{
-			resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = 255;
+			for(int i=0; i<basicTagValues->matrixSize->width;  i++)
+			{
+				int pos = k * basicTagValues->matrixSize->height * basicTagValues->matrixSize->width
+					+ j * basicTagValues->matrixSize->width + i;
+
+				if(volume[pos] < min) min  = volume[pos];
+				if(volume[pos] > max) max  = volume[pos];
+				mean += volume[pos];
+
+				resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = resultVolume[pos * 3 + 2] = 0;
+
+				if(volume[pos] >= THRESHOLD)
+				{
+					resultVolume[pos * 3] = resultVolume[pos * 3 + 1] = 255;
+				}
+			}
 		}
 	}
 	mean /= length;
@@ -109,13 +113,13 @@ measurmentMain(char* jobRootPath, int coreNum)
 	// Save measurement results
 	//------------------------------------------------------------------------------------------------------------------
 	sprintf(buffer, "Save measurement results (%s)", RESULT_FILE_NAME);
+
 	CircusCS_AppendLogFile(logFileName, buffer);
 	{
 		FILE* fp = fopen(resFileName, "w");
 		if(!fp)  return -1;
 
 		fprintf(fp, "%d, %.2f, %.2f, %.2f\n", 1, min, max, mean);
-
 		fclose(fp);
 	}
 	//------------------------------------------------------------------------------------------------------------------

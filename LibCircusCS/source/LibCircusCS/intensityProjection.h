@@ -22,10 +22,11 @@
 #define MIN_INTENSITY   1
 #define MEAN_INTENSITY  2
 
-template <typename VARTYPE> VARTYPE* CircusCS_CreateIntensityProjection(VARTYPE* volume,
-                                                                        CircusCS_INTSIZE3D* matrix3D,
-																		int mode,
-																		int section);
+template <typename VARTYPE> VARTYPE* CircusCS_CreateIntensityProjection(
+	VARTYPE* volume,
+	CircusCS_INTSIZE3D* matrix3D,
+	int mode,
+	int section);
 
 #endif
 

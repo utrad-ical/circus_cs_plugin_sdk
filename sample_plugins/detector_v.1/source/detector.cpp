@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int
-detectorMain(char* jobRootPath, int coreNum)
+	detectorMain(char* jobRootPath, int coreNum)
 {
 	char inVolumeFileName[1024], inDumpFileName[1024], logFileName[1024], outFileName[1024];
 	char buffer[1024];
@@ -46,8 +46,8 @@ detectorMain(char* jobRootPath, int coreNum)
 	CircusCS_AppendLogFile(logFileName, "Load volume data");
 
 	int length = basicTagValues->matrixSize->width
-			   * basicTagValues->matrixSize->height
-			   * basicTagValues->matrixSize->depth;
+		* basicTagValues->matrixSize->height
+		* basicTagValues->matrixSize->depth;
 	short* volume = CircusCS_LoadRawVolumeFile<short>(inVolumeFileName, length);
 
 	if(volume == NULL)
@@ -79,7 +79,7 @@ detectorMain(char* jobRootPath, int coreNum)
 		data[i][2] = (float)(basicTagValues->matrixSize->depth * (i + 2))/10.0f;	// location_z
 		data[i][3] = (float)(i * 10);												// volume [voxels]
 		data[i][4] = confidence;													// confidence
-	
+
 		confidence *= 0.9f;
 		tmpPos *= -2.0f;
 	}
@@ -113,7 +113,7 @@ detectorMain(char* jobRootPath, int coreNum)
 		fprintf(fp, "crop_width,  %d\n", basicTagValues->matrixSize->width);
 		fprintf(fp, "crop_height, %d\n", basicTagValues->matrixSize->height);
 		fprintf(fp, "crop_depth,  %d\n", basicTagValues->matrixSize->depth);
-	
+
 		fprintf(fp, "window_level, %d\n", RESULT_WINDOW_LEVEL);
 		fprintf(fp, "window_width, %d\n", RESULT_WINDOW_WIDTH);
 
@@ -129,7 +129,7 @@ detectorMain(char* jobRootPath, int coreNum)
 	{
 		sprintf(outFileName, "%s\\%s", jobRootPath, RESULT_FILE_NAME);
 		FILE* fp = fopen(outFileName, "w");
-	
+
 		if(fp == NULL)
 		{
 			sprintf(buffer, "Failed to write detector results: %s", outFileName);
@@ -140,8 +140,8 @@ detectorMain(char* jobRootPath, int coreNum)
 		}
 
 		double voxelVolume = basicTagValues->matrixSize->width
-							* basicTagValues->matrixSize->height
-							* basicTagValues->matrixSize->depth;
+			* basicTagValues->matrixSize->height
+			* basicTagValues->matrixSize->depth;
 
 		for(int n=0; n<candidateNum; n++)
 		{
@@ -149,12 +149,12 @@ detectorMain(char* jobRootPath, int coreNum)
 			float sliceLocation = basicTagValues->sliceLocation_mm[(int)data[n][2]];
 
 			fprintf(fp, "%d, %d, %d, %d, %.2f, %.2f, %f\n", n+1,
-								                            (int)data[n][0],
-						 									(int)data[n][1],
-															(int)data[n][2],
-															sliceLocation,
-															(double)data[n][3] * voxelVolume,
-															data[n][4]);
+				(int)data[n][0],
+				(int)data[n][1],
+				(int)data[n][2],
+				sliceLocation,
+				(double)data[n][3] * voxelVolume,
+				data[n][4]);
 
 		} // end for	
 

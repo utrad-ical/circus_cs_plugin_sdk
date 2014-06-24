@@ -21,27 +21,26 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CircusCS_INTSIZE2D*
-CircusCS_GetImageSizeBySection(CircusCS_INTSIZE3D* matrix3D, int section)
+CircusCS_INTSIZE2D* CircusCS_GetImageSizeBySection(CircusCS_INTSIZE3D* matrix3D, int section)
 {
 	CircusCS_INTSIZE2D* ret = CircusCS_NewIntSize2D(0, 0);
 
 	switch(section)
 	{
-		case AXIAL_SECTION:  // Axial
-			ret->width  = matrix3D->width;
-			ret->height = matrix3D->height;
-			break;
+	case AXIAL_SECTION:  // Axial
+		ret->width  = matrix3D->width;
+		ret->height = matrix3D->height;
+		break;
 
-		case CORONAL_SECTION:  // Coronal
-			ret->width  = matrix3D->width;
-			ret->height = matrix3D->depth;
-			break;
-			
-		case SAGITTAL_SECTION:  // Sagittal
-			ret->width  = matrix3D->height;
-			ret->height = matrix3D->depth;
-			break;
+	case CORONAL_SECTION:  // Coronal
+		ret->width  = matrix3D->width;
+		ret->height = matrix3D->depth;
+		break;
+
+	case SAGITTAL_SECTION:  // Sagittal
+		ret->width  = matrix3D->height;
+		ret->height = matrix3D->depth;
+		break;
 	} // end switch
 
 	return ret;
@@ -50,11 +49,12 @@ CircusCS_GetImageSizeBySection(CircusCS_INTSIZE3D* matrix3D, int section)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename VARTYPE> VARTYPE* 
-CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
-                                          CircusCS_INTSIZE3D* matrix3D,
-										  int sliceNum,
-										  int section,
-										  int type)
+	CircusCS_ExtractSingleSliceFromVolumeData(
+	VARTYPE* volume,
+	CircusCS_INTSIZE3D* matrix3D,
+	int sliceNum,
+	int section,
+	int type)
 {
 	// Check sliceNum
 	if(sliceNum < 0
@@ -73,14 +73,14 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 	if(type == CircusCS_VALUETYPE_RGB)  size *= 3;
 
 	if((ret = (VARTYPE*)calloc(size, sizeof(VARTYPE))) == NULL) return NULL;
-	
+
 	int pos2D, pos3D;
 
 	switch(section)
 	{
-		case AXIAL_SECTION:
-			{
-				for(int j=0; j<matrix3D->height; j++)
+	case AXIAL_SECTION:
+		{
+			for(int j=0; j<matrix3D->height; j++)
 				for(int i=0; i<matrix3D->width;  i++)
 				{
 					pos2D = j*matrix2D->width + i;
@@ -98,11 +98,11 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					}
 				}
 				break;
-			}
-			
-		case CORONAL_SECTION:
-			{
-				for(int k=0; k<matrix3D->depth; k++)
+		}
+
+	case CORONAL_SECTION:
+		{
+			for(int k=0; k<matrix3D->depth; k++)
 				for(int i=0; i<matrix3D->width; i++)
 				{
 					pos2D = k*matrix2D->width + i;
@@ -120,11 +120,11 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					}
 				}
 				break;
-			}
+		}
 
-		case SAGITTAL_SECTION:
-			{
-				for(int k=0; k<matrix3D->depth;  k++)
+	case SAGITTAL_SECTION:
+		{
+			for(int k=0; k<matrix3D->depth;  k++)
 				for(int j=0; j<matrix3D->height; j++)
 				{
 					pos2D = k*matrix2D->width + j;
@@ -142,7 +142,7 @@ CircusCS_ExtractSingleSliceFromVolumeData(VARTYPE* volume,
 					}
 				}
 				break;
-			}
+		}
 	} // end switch
 
 	return ret;
@@ -159,7 +159,7 @@ template int*            CircusCS_ExtractSingleSliceFromVolumeData<int>(int* vol
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename VARTYPE> unsigned char* 
-CircusCS_SetWindowAndConvertToUint8Image(VARTYPE* img, int length, int windowLevel, int windowWidth)
+	CircusCS_SetWindowAndConvertToUint8Image(VARTYPE* img, int length, int windowLevel, int windowWidth)
 {
 	unsigned char* ret = NULL;
 	if((ret = (unsigned char*)calloc(length, sizeof(unsigned char))) == NULL) return NULL;
