@@ -946,7 +946,7 @@ int CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZ
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation0, sliceNum)==-1)   return -1;
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation1, sliceNum+1)==-1) return -1;
 
-		voxelSize_mm->depth = abs(sliceLocation1 - sliceLocation0);
+		voxelSize_mm->depth = fabs(sliceLocation1 - sliceLocation0);
 	}
 
 	return 0;
