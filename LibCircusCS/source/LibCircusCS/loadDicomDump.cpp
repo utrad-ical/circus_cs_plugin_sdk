@@ -60,10 +60,10 @@ std::vector<std::string> splitString(std::string str, std::string delim)
 {
 	std::vector<std::string> ret;
 
-	for(unsigned int i=0, n; i <= str.length(); i=n+1 )
+	for(int i=0, n; i <= str.length(); i=n+1 )
 	{
-		n = (unsigned int)str.find_first_of(delim, i);
-		if( n == std::string::npos ) n = (unsigned int)str.length();
+		n = (int)str.find_first_of(delim, i);
+		if( n == std::string::npos ) n = (int)str.length();
 		std::string tmp = str.substr( i, n-i );
 		ret.push_back(tmp);
 	}
@@ -942,7 +942,7 @@ int CircusCS_GetVoxelSizeOfDumpData(CircusCS_DCMDUMPDATA* dumpData, CircusCS_SIZ
 	else
 	{
 		float sliceLocation0, sliceLocation1;	
-
+		
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation0, sliceNum)==-1)   return -1;
 		if(CircusCS_GetSliceLocationOfDumpData(dumpData, &sliceLocation1, sliceNum+1)==-1) return -1;
 
